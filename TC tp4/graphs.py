@@ -5,6 +5,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.figure import Figure
 from tkinter import *
+import numpy as np
+
 
 class graphs:
     def plotPhase(self):
@@ -17,10 +19,10 @@ class graphs:
 
     def plotMag(self):
         self.axis.clear()
-        self.axis.semilogx(self.w,self.mag)
+        self.axis.semilogx(self.w,-self.mag)
         self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis.set_xlabel("$f (Hz)$")
-        self.axis.set_ylabel("$V_{out}/V_{in} (dB)$")
+        self.axis.set_ylabel("$Attenuation (dB)$")
         self.dataPlot.draw()
 
     def plotStep(self):
@@ -39,11 +41,23 @@ class graphs:
         self.axis.set_ylabel("$V_{out} (Volts)$")
         self.dataPlot.draw()
 
+    def plotPZ(self):
+        self.axis.clear()
+        for i in range(0,self.pzg[0].size): #plotea los ceros
+            self.axis.plot(np.real(self.pzg[0][i]),np.imag(self.pzg[0][i]),'o')
+        for i in range(0,self.pzg[1].size): #plotea los polos
+            self.axis.plot(np.real(self.pzg[1][i]),np.imag(self.pzg[1][i]),'X')
+        self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
+        self.axis.set_xlabel("$Real$")
+        self.axis.set_ylabel("$Imaginary$")
+        self.dataPlot.draw()
+
     def set_low_pass(self):
         self.sys = signal.TransferFunction([1],[1,1])
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
+        self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
         self.plotMag()
 
     def set_high_pass(self):
@@ -51,14 +65,16 @@ class graphs:
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
+        self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
+        print (self.pzg[0].size)
         self.plotMag()
-
 
     def set_band_pass(self):
         self.sys = signal.TransferFunction([1,0],[1,1,1])
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
+        self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
         self.plotMag()
 
     def set_band_stop(self):
@@ -66,9 +82,9 @@ class graphs:
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
+        self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
         self.plotMag()
         
-
     def __init__(self):
         self.root = Tk()
         self.root.title("TP4")
@@ -83,6 +99,8 @@ class graphs:
         buttonStep.pack(side=LEFT,padx=2,pady=2)
         buttonImp = Button(toolbar,text="Impulse",command=self.plotImp)
         buttonImp.pack(side=LEFT,padx=2,pady=4)
+        buttonPZ = Button(toolbar,text="Poles and zeros",command=self.plotPZ)
+        buttonPZ.pack(side=LEFT,padx=2,pady=4)
         button_low_pass = Button(toolbar2, text = "Low Pass", command = self.set_low_pass)
         button_low_pass.pack(side=LEFT,padx=2,pady=4)
         button_high_pass = Button(toolbar2, text = "High Pass", command = self.set_high_pass)
