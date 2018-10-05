@@ -1,5 +1,6 @@
 import matplotlib, sys
 matplotlib.use('TkAgg')
+import math 
 from scipy import signal
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends._backend_tk import NavigationToolbar2Tk
@@ -11,7 +12,7 @@ import numpy as np
 class graphs:
     def plotPhase(self):
         self.axis.clear()
-        self.axis.semilogx(self.w,self.phase)
+        self.axis.semilogx(((self.w)/(2*(math.pi))),self.phase)
         self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis.set_xlabel("$f (Hz)$")
         self.axis.set_ylabel("$Phase (deg)$")
@@ -19,7 +20,7 @@ class graphs:
 
     def plotMag(self):
         self.axis.clear()
-        self.axis.semilogx(self.w,-self.mag)
+        self.axis.semilogx((self.w/(2*(math.pi))),-self.mag)
         self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis.set_xlabel("$f (Hz)$")
         self.axis.set_ylabel("$Attenuation (dB)$")
@@ -41,6 +42,14 @@ class graphs:
         self.axis.set_ylabel("$V_{out} (Volts)$")
         self.dataPlot.draw()
 
+    def plotGroupDelay(self):
+        self.axis.clear()
+        self.axis.plot(self.GDfreq,self.gd)
+        self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
+        self.axis.set_ylabel("$Group delay [ms]$")
+        self.axis.set_xlabel("$Frequency [Hz]$")
+        self.dataPlot.draw()
+
     def plotPZ(self):
         self.axis.clear()
         for i in range(0,self.pzg[0].size): #plotea los ceros
@@ -53,36 +62,48 @@ class graphs:
         self.dataPlot.draw()
 
     def set_low_pass(self):
+        self.num=[1]
+        self.den=[1,1]
         self.sys = signal.TransferFunction([1],[1,1])
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
+        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
         self.plotMag()
 
     def set_high_pass(self):
+        self.num=[1,0]
+        self.den=[1,1]
         self.sys = signal.TransferFunction([1,0],[1,1])
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
+        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
         print (self.pzg[0].size)
         self.plotMag()
 
     def set_band_pass(self):
+        self.num=[1,0]
+        self.den=[1,1,1]
         self.sys = signal.TransferFunction([1,0],[1,1,1])
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
+        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
         self.plotMag()
 
     def set_band_stop(self):
+        self.num=[1,0,1]
+        self.den=[1,1,1]
         self.sys = signal.TransferFunction([1,0,1],[1,1,1])
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
+        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
         self.plotMag()
         
     def __init__(self):
@@ -91,6 +112,8 @@ class graphs:
         #------------------------------------------------------------------------
         toolbar = Frame(self.root)
         toolbar2 = Frame(self.root)
+       #primera toolbar
+
         buttonPhase = Button(toolbar,text="Bode Phase",command=self.plotPhase)
         buttonPhase.pack(side=LEFT,padx=2,pady=2)
         buttonMag = Button(toolbar,text="Bode Mag",command=self.plotMag)
@@ -101,6 +124,10 @@ class graphs:
         buttonImp.pack(side=LEFT,padx=2,pady=4)
         buttonPZ = Button(toolbar,text="Poles and zeros",command=self.plotPZ)
         buttonPZ.pack(side=LEFT,padx=2,pady=4)
+        buttonGD = Button(toolbar,text="Group Delay",command=self.plotGroupDelay)
+        buttonGD.pack(side=LEFT,padx=2,pady=4)
+       
+       # segunda toolbar
         button_low_pass = Button(toolbar2, text = "Low Pass", command = self.set_low_pass)
         button_low_pass.pack(side=LEFT,padx=2,pady=4)
         button_high_pass = Button(toolbar2, text = "High Pass", command = self.set_high_pass)
