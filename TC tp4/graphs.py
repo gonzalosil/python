@@ -6,6 +6,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.figure import Figure
 from tkinter import *
+from tkinter import ttk
 import numpy as np
 
 
@@ -105,13 +106,73 @@ class graphs:
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
         self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
         self.plotMag()
+
+#-------------------------------------------------------------------------
+
+    def SelectFilter(self):
         
+        self.AttenuationAp()
+        self.AttenuationAa()
+        v=["Low Pass","High Pass","Band Pass","Band Stop"]
+        combo=ttk.Combobox(self.root,values=v, width=20)
+        combo.set("Select Type of Filter")
+        combo.pack(side=LEFT,padx=2,pady=4)
+        self.SelectFilter=combo
+        button= Button(self.root, text="Graph", command=self.graph_me).pack(side=LEFT)
+
+
+
+    def graph_me(self):
+
+        value=self.SelectFilter.get()
+        Ap=self.AttenuationAp.get()
+        Aa=self.AttenuationAa.get()
+
+        print(value)
+        print(Ap)
+        print(Aa)  # Para castear estos valores simplemente hacer 
+
+
+        if value=="Low Pass":
+            self.set_low_pass()
+        if value=="High Pass":
+            self.set_high_pass()
+        if value=="Band Pass":
+            self.set_band_pass()
+        if value=="Band Stop":
+            self.set_band_stop()
+
+
+
+
+#------------------------------------------------------------------------------------------------------------
+    def AttenuationAp(self):
+        Ap=Label(text="Ap:").place(x=0,y=300)
+        entradaAp=StringVar()
+        txtUsuario=Entry(self.root, textvariable=entradaAp).place(x=30,y=300)
+        self.AttenuationAp=entradaAp
+
+    def AttenuationAa(self):
+        Aa=Label(text="Aa:").place(x=0,y=330)
+        entradaAa=StringVar()
+        txtUsuario=Entry(self.root, textvariable=entradaAa).place(x=30,y=330)
+        self.AttenuationAa=entradaAa
+
+
+#---------------------------------------------------------------------------------------------------------
     def __init__(self):
         self.root = Tk()
         self.root.title("TP4")
+
+
+
+
+  
         #------------------------------------------------------------------------
         toolbar = Frame(self.root)
-        toolbar2 = Frame(self.root)
+        #toolbar2 = Frame(self.root)
+   
+       
        #primera toolbar
 
         buttonPhase = Button(toolbar,text="Bode Phase",command=self.plotPhase)
@@ -128,19 +189,22 @@ class graphs:
         buttonGD.pack(side=LEFT,padx=2,pady=4)
        
        # segunda toolbar
-        button_low_pass = Button(toolbar2, text = "Low Pass", command = self.set_low_pass)
-        button_low_pass.pack(side=LEFT,padx=2,pady=4)
-        button_high_pass = Button(toolbar2, text = "High Pass", command = self.set_high_pass)
-        button_high_pass.pack(side=LEFT,padx=2,pady=4)
-        button_band_pass = Button(toolbar2, text = "Band Pass", command = self.set_band_pass)
-        button_band_pass.pack(side=LEFT,padx=2,pady=4)
-        button_band_stop = Button(toolbar2, text = "Stop Band", command = self.set_band_stop)
-        button_band_stop.pack(side=LEFT,padx=2,pady=4)
+        self.SelectFilter()
+
+       
+        #button_low_pass = Button(toolbar2, text = "Low Pass", command = self.set_low_pass)
+        #button_low_pass.pack(side=LEFT,padx=2,pady=4)
+        #button_high_pass = Button(toolbar2, text = "High Pass", command = self.set_high_pass)
+        #button_high_pass.pack(side=LEFT,padx=2,pady=4)
+        #button_band_pass = Button(toolbar2, text = "Band Pass", command = self.set_band_pass)
+        #button_band_pass.pack(side=LEFT,padx=2,pady=4)
+        #button_band_stop = Button(toolbar2, text = "Stop Band", command = self.set_band_stop)
+        #button_band_stop.pack(side=LEFT,padx=2,pady=4)
         toolbar.pack(side=TOP,fill=X)
-        toolbar2.pack(side=TOP, fill=X)
+        #toolbar2.pack(side=TOP, fill=X)
         graph = Canvas(self.root)
         graph.pack(side=TOP,fill=BOTH,expand=True,padx=2,pady=4)
-        
+
         #--------------------------------------------------------------------------------
 
         f = Figure()
@@ -153,7 +217,11 @@ class graphs:
         nav.update()
         self.dataPlot._tkcanvas.pack(side=TOP, fill=X, expand=True)
 
-        #-------------------------------------------------------------------------------
+       
+       
+
+        
+        #self.root.geometry("1000x1000")
         self.root.mainloop()
 
 if __name__ == "__main__":
