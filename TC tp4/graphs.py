@@ -113,6 +113,8 @@ class graphs:
         
         self.AttenuationAp()
         self.AttenuationAa()
+        self.Frec_p()
+        self.Frec_a()
         v=["Low Pass","High Pass","Band Pass","Band Stop"]
         combo=ttk.Combobox(self.root,values=v, width=20)
         combo.set("Select Type of Filter")
@@ -127,11 +129,14 @@ class graphs:
         value=self.SelectFilter.get()
         Ap=self.AttenuationAp.get()
         Aa=self.AttenuationAa.get()
+        Fp=self.Frec_p.get()
+        Fa=self.Frec_a.get()
 
         print(value)
         print(Ap)
-        print(Aa)  # Para castear estos valores simplemente hacer 
-
+        print(Aa)  # Para castear estos valores simplemente hacer int(variable)
+        print(Fp)
+        print(Fa)
 
         if value=="Low Pass":
             self.set_low_pass()
@@ -149,14 +154,26 @@ class graphs:
     def AttenuationAp(self):
         Ap=Label(text="Ap:").place(x=0,y=300)
         entradaAp=StringVar()
-        txtUsuario=Entry(self.root, textvariable=entradaAp).place(x=30,y=300)
+        txtUsuario=Entry(self.root, width=5 ,textvariable=entradaAp).place(x=30,y=300)
         self.AttenuationAp=entradaAp
 
     def AttenuationAa(self):
-        Aa=Label(text="Aa:").place(x=0,y=330)
+        Aa=Label(text="Aa:").place(x=70,y=300)
         entradaAa=StringVar()
-        txtUsuario=Entry(self.root, textvariable=entradaAa).place(x=30,y=330)
+        txtUsuario=Entry(self.root, width=5 ,textvariable=entradaAa).place(x=100,y=300)
         self.AttenuationAa=entradaAa
+
+    def Frec_p(self):
+        Fp=Label(text="Fp:").place(x=0,y=330)
+        entradaFp=StringVar()
+        txtUsuario=Entry(self.root, width=5, textvariable=entradaFp).place(x=30,y=330)
+        self.Frec_p=entradaFp
+
+    def Frec_a(self):
+        Fa=Label(text="Fa:").place(x=70,y=330)
+        entradaFa=StringVar()
+        txtUsuario=Entry(self.root, width=5, textvariable=entradaFa).place(x=100,y=330)
+        self.Frec_a=entradaFa
 
 
 #---------------------------------------------------------------------------------------------------------
