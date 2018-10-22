@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Chevy_1.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="graphs.py">
       <SubType>Code</SubType>
     </Compile>
