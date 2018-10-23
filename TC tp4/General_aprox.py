@@ -3,6 +3,7 @@ import math as m
 
 class General_aprox(object):
     def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas, tipo, a):
+        super().__init__()
         self.As=As
         self.Ap=Ap
         self.wp=wp
@@ -32,7 +33,7 @@ class General_aprox(object):
         elif(self.tipo=="BR"):
             self.wsn=(self.wpMas-self.wpMenos)/(self.wsMas-self.wsMenos)
         else:
-            wsn=1
+            self.wsn=1
         return;
 
 
