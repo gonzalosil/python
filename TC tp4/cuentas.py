@@ -24,9 +24,8 @@ def conseguir_tf(exp, var, poles = []):
         value[0][i] = complex(value[0][i].evalf(subs=my_subs))
     for i in range(len(value[1])):
         value[1][i] = complex(value[1][i].evalf(subs=my_subs))
-    #print(value[0], value[1])
+    print(value[0], value[1])
 
     tf = signal.lti(value[0], value[1])
 
     return tf
-

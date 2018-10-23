@@ -2,6 +2,20 @@ import math as m
 
 
 class General_aprox(object):
+
+    def normalizacion(self):
+        if (self.tipo == "LP"):
+            self.wsn=((self.ws)/(self.wp))
+        elif (self.tipo == "HP"):
+            self.wsn=((self.wp)/(self.ws))
+        elif(self.tipo == "BP"):
+            self.wsn=(self.wsMas-self.wsMenos)/(self.wpMas-self.wpMenos)
+        elif(self.tipo=="BR"):
+            self.wsn=(self.wpMas-self.wpMenos)/(self.wsMas-self.wsMenos)
+        else:
+            wsn=1
+        return;
+
     def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas, tipo, a):
         self.As=As
         self.Ap=Ap
@@ -22,18 +36,10 @@ class General_aprox(object):
         self.normalizacion()
         return;
 
-    def normalizacion(self):
-        if (self.tipo == "LP"):
-            self.wsn=((self.ws)/(self.wp))
-        elif (self.tipo == "HP"):
-            self.wsn=((self.wp)/(self.ws))
-        elif(self.tipo == "BP"):
-            self.wsn=(self.wsMas-self.wsMenos)/(self.wpMas-self.wpMenos)
-        elif(self.tipo=="BR"):
-            self.wsn=(self.wpMas-self.wpMenos)/(self.wsMas-self.wsMenos)
-        else:
-            wsn=1
-        return;
+    def denormalization (zeros, poles, type): #type se refiere a que tipo de filtro es
+
+
+
 
 
 
