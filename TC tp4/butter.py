@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
 
-Ap=0.5  #banda pasante
+Ap=3  #banda pasante
 As=20   #banda atenuada
 wp=1000
 ws=2000
@@ -34,7 +34,7 @@ def Butterworthaprox(self):
 ep=m.sqrt((10**(Ap/10))-1)
 n=m.ceil(m.log10((m.sqrt((10**(As/10))-1)/ep))/m.log10(ws/wp))
 
-modulo=ep**(1/n)
+modulo=1/(ep**(1/n))
 poles=[]
 polos=[]
 sk=[]
@@ -44,19 +44,23 @@ s = sp.Symbol("s",imag=True)
 
 #print(expand(h))
 h=1
-modulo=1
+
+ganancia=1
 
 for k in range(1,n+1):
      polo=modulo*exp(1j * (2 * k + n - 1) * (pi / (2 * n)))
      re=Decimal(polo.real)
      imaginario=Decimal(polo.imag)
-
-     sk.append(polo)
-for i in range (0,n):
+     if(polo.real < 0):
+         sk.append(polo)
+         ganancia=ganancia*np.abs(polo)
+     
+print(ganancia)     
+for i in range (len(sk)):
     #print(s-sk[i],sk[i])
-    h=h*(s-sk[i])
+    h=h*((s/sk[i])-1)*sk[i]
     
-h=1/h
+
 #print(sp.expand(h))
 test=cuentas.conseguir_tf(1/h,s)
 w,mag,phase = signal.bode(test)
