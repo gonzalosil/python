@@ -40,13 +40,14 @@ class Butterworth(General.General_aprox):
         return;
 
     def polosButter(self):
-        r0=self.epsilon
+        r0=1
         raiz=1
         for k in range(1,self.n+1):
             raiz=r0*(-np.sin(np.pi*(2*k-1)/(2*self.n))+1j*np.cos(np.pi*(2*k-1)/(2*self.n)))
-            if(np.real(raiz) < 0):
+            if(np.real(raiz) < 0.0000000001):
                 self.polos.append(raiz)
                 poli=np.poly1d([-1/raiz,1])
+                print(poli,"polo",k)
                 self.denom=self.denom*poli
         print(self.denom)
                
@@ -57,12 +58,17 @@ class Butterworth(General.General_aprox):
         self.Transferencia_norm=signal.TransferFunction(self.num,self.denom) 
         print(self.Transferencia_norm)
         self.denom=np.poly1d([1])
+        wc = self.wp /(self.epsilon**(1/self.n))
         for i in range(0,len(self.polos)):
-            poli=np.poly1d([-1/(self.polos[i])*(1/self.wp)*((self.epsilon)**(1/self.n)),1])
+            #poli=np.poly1d([-self.polos[i],wc])
+            poli=np.poly1d([(1/wc),-self.polos[i]])           #pasabajos
             self.denom=self.denom*poli
-        print(self.denom)
+        
+        #poli_denor=np.poly1d([1,0])
+        #self.denom=self.denom*poli_denor
+        #self.num=self.num*poli_denor
+        #print("aca viene el arreglo flashero")
         self.Transferencia_desnorm=signal.TransferFunction(self.num,self.denom)
-            
  #       self.Transferencia=sp.signal.zpk2tf(self.zeros,self.polos,1)
         #print(self.Transferencia)
 

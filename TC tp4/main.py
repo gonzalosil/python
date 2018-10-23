@@ -14,7 +14,7 @@ from matplotlib.figure import Figure
 from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
 
-test=Butterworth.Butterworth(20,3,1000,2000,0,0,0,0,"LP",0)
+test=Butterworth.Butterworth(20,0.5,1000,2000,0,0,0,0,"LP",0)
 
 
 w, mag, phase = sp.signal.bode(test.Transferencia_norm)
