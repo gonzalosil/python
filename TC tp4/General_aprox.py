@@ -16,12 +16,13 @@ class General_aprox(object):
             wsn=1
         return;
 
-    def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas, tipo, a):
+    def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas,orden, tipo, a):
         super().__init__()
         self.As=As
         self.Ap=Ap
         self.wp=wp
         self.ws=ws
+        self.n=orden   #ORDEN EN LA QUE SE QUIERE EL FILTRO
         self.wpMenos=wpMenos
         self.wpMas=wpMas
         self.wsMenos=wsMenos
