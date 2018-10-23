@@ -1,5 +1,6 @@
 import math as m
-
+from scipy import signal
+import control as c
 
 class General_aprox(object):
 
@@ -37,18 +38,38 @@ class General_aprox(object):
         self.normalizacion()
         return;
 
-    def normalizacion(self):
-        if (self.tipo == "LP"):
-            self.wsn=((self.ws)/(self.wp))
-        elif (self.tipo == "HP"):
-            self.wsn=((self.wp)/(self.ws))
-        elif(self.tipo == "BP"):
-            self.wsn=(self.wsMas-self.wsMenos)/(self.wpMas-self.wpMenos)
-        elif(self.tipo=="BR"):
-            self.wsn=(self.wpMas-self.wpMenos)/(self.wsMas-self.wsMenos)
-        else:
-            self.wsn=1
-        return;
+    def denormalization (type, W, n, poles=None, zeros=None): #type se refiere al tipo de filtro que se desea
+        if type == "LP":
+            s = c.tf([1,0],[W])
+            tf = c.tf([1],[1])
+            if zeros != None:
+                for k in range (0,len(zeros)):
+                    tf = tf * (s-zeros(k))
+
+            for k in range (0,len(poles)):
+                tf = tf * 1/(s-poles[k])
+            #print(tf.num[0][0])
+            tf = signal.TransferFunction(tf.num[0][0], tf.den[0][0])
+
+        elif type == "HP":
+            s = c.tf([W],[1,0])
+            tf = c.tf([1],[1])
+            if zeros != None:
+                for k in range (0,len(zeros)):
+                    tf = tf * (s-zeros(k))
+
+            for k in range (0,len(poles)):
+                tf = tf * 1/(s-poles[k])
+            #print(tf.num[0][0])
+            tf = signal.TransferFunction(tf.num[0][0], tf.den[0][0])
+        return tf
+
+
+
+if __name__ == "__main__":
+    ex=General_aprox.denormalization("LP", 100, 5, [-3.])
+    
+
 
 
 
