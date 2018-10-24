@@ -39,7 +39,7 @@ class General_aprox(object):
         self.normalizacion()
         return;
 
-    def denormalization (type, W, n, poles=None, zeros=None, Wpmas=None, Wamenos=None, Wamas=None): #type se refiere al tipo de filtro que se desea
+    def denormalization (self, type, W, n, poles=None, zeros=None, Wpmas=None, Wamenos=None, Wamas=None): #type se refiere al tipo de filtro que se desea
         #si es BP o BR W se usa como Wp- 
         if type == "LP":
             s = c.tf([1,0],[W])
