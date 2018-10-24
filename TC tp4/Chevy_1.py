@@ -18,7 +18,7 @@ class Chevy_1(object):
         n=m.ceil(m.acosh((m.sqrt(m.pow(10,As/10)-1))/e)/(m.acosh(Ws/Wp)))
 
         #hallo los polos de chevy
-
+        print("hola mijo")
         alpha = []
         beta = []
         sigma = []
