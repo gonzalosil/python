@@ -37,9 +37,11 @@ class General_aprox(object):
         if (self.tipo == "BP") or (self.tipo == "BR"):
             self.b=(self.wpMas-self.wpMenos)/m.sqrt(self.wpMas*self.wpMenos)
         self.normalizacion()
+        self.Q=[]
+        self.qmax=0
         return;
 
-    def denormalization (type, W, n, poles=None, zeros=None): #type se refiere al tipo de filtro que se desea
+    def denormalization (self,type, W, n, poles=None, zeros=None): #type se refiere al tipo de filtro que se desea
         if type == "LP":
             s = c.tf([1,0],[W])
             tf = c.tf([1],[1])
@@ -64,6 +66,15 @@ class General_aprox(object):
             #print(tf.num[0][0])
             tf = signal.TransferFunction(tf.num[0][0], tf.den[0][0])
         return tf
+    def calcular_q(self):
+        for i in range (0,len(self.polos)):
+            modulo=np.abs(self.polos[i])
+            qaux=(modulo/(-2*np.real((self.polos[i]))))
+            self.Q.append(qaux)
+            self.qmax=self.Q[len(self.Q)-1]
+        ##  print("aca estan los q",self.Q)
+        return;
+       
 
 
 
