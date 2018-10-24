@@ -83,11 +83,28 @@ class General_aprox(object):
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
 
-            k = tf.num[0][0][0]/tf.den[0][0][0]
+            k =1# tf.den[0][0][len(tf.den[0][0])-1]/tf.num[0][0][0]
+
             tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
 
         elif type == "BR":
-            print("hacer esto")
+            Wo=m.sqrt(Wpmas*W)
+            B=(Wpmas-W)/Wo
+            s1=c.tf([1,0],[Wo])
+            s2=c.tf([Wo],[1,0])
+            s=1/(1/B*(s1+s2))
+            tf = c.tf([1],[1])
+
+            if zeros != None:
+                for k in range (0,len(zeros)):
+                    tf = tf * (s-zeros(k))
+            if poles != None:
+                for k in range (0,len(poles)):
+                    tf = tf * 1/(s-poles[k])
+
+            k =1# tf.den[0][0][len(tf.den[0][0])-1]/tf.num[0][0][0]
+
+            tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
             
         return tf
 

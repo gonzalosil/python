@@ -18,12 +18,14 @@ test=Butterworth.Butterworth(20,0.5,2000,1000,0,0,0,0,2,"HP",0)
 
 print(test.polos)
 
+print(" ")
+print(test.separar_a_ordenes_menores())
 
 
-w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
-xscale('log')
-plot(w,mag)
-show()
+#w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
+#xscale('log')
+#plot(w,mag)
+#show()
 
 #wachin=test.conseguir_polos_por_separado()
 #print(wachin)
