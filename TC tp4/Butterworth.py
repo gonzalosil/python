@@ -27,6 +27,7 @@ class Butterworth(General.General_aprox):
         self.polosButter()
         self.funcionTransferencia()
         self.Q=[]
+        self.qmax=0
         self.calcular_q()
        # self.conseguir_polos_por_separado()
         #self.testeador=self.cons
@@ -70,25 +71,38 @@ class Butterworth(General.General_aprox):
             wc = self.wp /(self.epsilon**(1/self.n))
         elif(self.tipo == "HP"):
             wc = self.wp * (self.epsilon**(1/self.n))
-            ##CAMBIAR POR FUNCION QUE DESNORMALIZA
+       
         self.Transferencia_desnorm=self.denormalization(self.tipo,wc,self.n,self.polos)
         
-        #poli_denor=np.poly1d([1,0])
-        #self.denom=self.denom*poli_denor
-        #self.num=self.num*poli_denor
-        #print("aca viene el arreglo flashero")
-#        self.Transferencia_desnorm=signal.TransferFunction(self.num,self.denom)
+  
         return;
- #       self.Transferencia=sp.signal.zpk2tf(self.zeros,self.polos,1)
-        #print(self.Transferencia)
 
+    #agregar a general aprox
     def calcular_q(self):
         for i in range (0,len(self.polos)):
             modulo=np.abs(self.polos[i])
             qaux=(modulo/(-2*np.real((self.polos[i]))))
             self.Q.append(qaux)
-        print("aca estan los q",self.Q)
+            self.Q.sort()
+            self.qmax=self.Q[(len(self.Q)-1)]
         return;
+
+    def separar_a_ordenes_menores(self):
+        aux=[]
+        test=0
+        for i in range(0,len(self.polos)):
+            if(np.abs(np.imag(self.polos[i])) < 0.00000001):
+                aux.append(self.polos[i]) #para polos con parte iimagianaria igual a 0
+            else:
+                #test=(cmath.polar((np.conjugate(self.polos[i]))))
+                for j in range (i+1,len(self.polos)):
+                 #   b=(cmath.polar(self.polos[j]))
+                    if ((np.abs(self.polos[i]) ) == (np.abs(self.polos[j]))):
+                        if( (cmath.phase(self.polos[i])) == (-1*cmath.phase(self.polos[j])) ):
+                            aux.append(self.polos[i])
+        return aux;
+
+                        
 
 
                 
@@ -96,4 +110,4 @@ class Butterworth(General.General_aprox):
 
 
 
-
+    
