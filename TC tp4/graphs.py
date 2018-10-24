@@ -114,8 +114,8 @@ class graphs:
         self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
         self.plotMag()
 
-#-------------------------------------------------------------------------
-#--Se aprieta el boton Select
+#----------------------------------------------------------------------------------------------
+#--Se aprieta el boton Select y se ponen las entrys dependiendo el tipo de filtro y aproximacion
 #-------------------------------
     def Se_Apreto_Select(self):
 
@@ -124,13 +124,17 @@ class graphs:
         ApproxSelected=self.Type_of_approx.get()
 
         if ApproxSelected=="Butterworth":
-           print(ApproxSelected)
+           self.hide_label_and_entry_BESSEL()
+           #print(ApproxSelected)
         elif  ApproxSelected=="Chebycheff":
-            print(ApproxSelected)
+            self.hide_label_and_entry_BESSEL()
+            #print(ApproxSelected)
         elif  ApproxSelected=="Chebycheff Inverso":
-            print(ApproxSelected)
+            self.hide_label_and_entry_BESSEL()
+            #print(ApproxSelected)
         elif ApproxSelected=="Bessel":
-            print(ApproxSelected)
+            self.label_and_entry_BESSEL()
+            #print(ApproxSelected)
         else:
             print("unknown")
 
@@ -139,23 +143,153 @@ class graphs:
         FilterSelected=self.Type_of_filter.get()
 
         if FilterSelected=="Low Pass":
-           print(FilterSelected)
+           #print(FilterSelected)
            self.labels_and_entrys_LPHP()
            #self.set_low_pass()
         elif  FilterSelected=="High Pass":
-            print(FilterSelected)
+            #print(FilterSelected)
             self.labels_and_entrys_LPHP()
             #self.set_high_pass()
         elif  FilterSelected=="Band Pass":
-            print(FilterSelected)
+            #print(FilterSelected)
             self.labels_and_entrys_BPBS()
             #self.set_band_pass()
         elif FilterSelected=="Band Stop":
-            print(FilterSelected)
+            #print(FilterSelected)
             self.labels_and_entrys_BPBS()
             #self.set_band_stop()
         else:
             print("unknown")
+
+#------------------------------------
+#
+#-------------------------------------
+    def Se_Apreto_Graph(self):
+
+        #tipo de filtro y aproximacion
+        ApproxSelected=self.Type_of_approx.get()
+        FilterSelected=self.Type_of_filter.get()
+        print(ApproxSelected) #dato
+        print(FilterSelected) #dato
+
+        #frecuencia de denormalizacion
+        Selected_Denorm_Frec=self.Denormalize_frec.get()
+        if Selected_Denorm_Frec=="Wother":
+            Denormalize_percentage=self.entry_Denorm_percentage.get()
+        elif Selected_Denorm_Frec=="Wp":
+            print(self.Denormalize_frec.get())
+            Denormalize_percentage=0
+        elif Selected_Denorm_Frec=="Wa":
+            print(self.Denormalize_frec.get())
+            Denormalize_percentage=100
+        else:
+            Denormalize_percentage=None
+        #porcentaje de denormalizacion
+        print(Denormalize_percentage) #dato
+
+
+        #frecuencias y atenuaciones 0
+        if len(self.entry_wp0.get()) != 0:
+            wp0=int(self.entry_wp0.get())
+        else:
+            wp0=None
+        print(wp0) #dato
+
+        if len(self.entry_wa0.get()) != 0:
+            wa0=int(self.entry_wa0.get())
+        else:
+            wa0=None
+        print(wa0) #dato
+
+        if len(self.entry_Ap0.get()) != 0:
+            Ap0=int(self.entry_Ap0.get())
+        else:
+            Ap0=None
+        print(Ap0) #dato
+
+        if len(self.entry_Aa0.get()) != 0:
+            Aa0=int(self.entry_Aa0.get())
+        else:
+            Aa0=None
+        print(Aa0) #dato
+
+        #frecuencias y atenuaciones 1
+        if len(self.entry_wp1.get()) != 0:
+            wp1=int(self.entry_wp1.get())
+        else:
+            wp1=None
+        print(wp1) #dato
+
+        if len(self.entry_wa1.get()) != 0:
+            wa1=int(self.entry_wa1.get())
+        else:
+            wa1=None
+        print(wa1) #dato
+
+        if len(self.entry_Ap1.get()) != 0:
+            Ap1=int(self.entry_Ap1.get())
+        else:
+            Ap1=None
+        print(Ap1) #dato
+
+        if len(self.entry_Aa1.get()) != 0:
+            Aa1=int(self.entry_Aa1.get())
+        else:
+            Aa1=None
+        print(Aa1) #dato
+
+        #orden del filtro
+
+        Selected_checkbotton_orden=self.var_Orden.get()
+        if Selected_checkbotton_orden:
+            Orden=int(self.entry_orden.get())
+        else:
+            Orden=None 
+        print(Orden) #dato
+         
+        #Q del filtro
+
+        Selected_checkbotton_Q=self.var_Q.get()
+        if Selected_checkbotton_Q:
+            Q=int(self.entry_Q.get())
+        else:
+            Q=None
+        print(Q) #dato
+
+        #if ApproxSelected=="Butterworth":
+        #elif  ApproxSelected=="Chebycheff":
+        #elif  ApproxSelected=="Chebycheff Inverso":
+        #elif
+        if ApproxSelected=="Bessel":
+            Tretardo=int(self.entry_Tretardo.get())
+            print(Tretardo)
+        #else:
+        #   print("unknown")
+
+
+
+        FilterSelected=self.Type_of_filter.get()
+
+        if FilterSelected=="Low Pass":
+           #print(FilterSelected)
+           self.labels_and_entrys_LPHP()
+           #self.set_low_pass()
+        elif  FilterSelected=="High Pass":
+            #print(FilterSelected)
+            self.labels_and_entrys_LPHP()
+            #self.set_high_pass()
+        elif  FilterSelected=="Band Pass":
+            #print(FilterSelected)
+            self.labels_and_entrys_BPBS()
+            #self.set_band_pass()
+        elif FilterSelected=="Band Stop":
+            #print(FilterSelected)
+            self.labels_and_entrys_BPBS()
+            #self.set_band_stop()
+        else:
+            print("unknown")
+
+
 
 #---------------
 #--aca se eligio la frecuencia de denormalizacion
@@ -208,6 +342,12 @@ class graphs:
         self.entry_wa1.grid_forget()
         self.entry_Ap1.grid_forget()
         self.entry_Aa1.grid_forget()
+
+        self.entry_wp1.delete(0, END)
+        self.entry_wa1.delete(0, END)
+        self.entry_Ap1.delete(0, END)
+        self.entry_Aa1.delete(0, END)
+        
 
         self.label_Hz.grid_forget()
         self.label_dB.grid_forget()
@@ -265,8 +405,21 @@ class graphs:
         self.label_dB=Label(self.ventana_izquierda,text="dB")
         self.label_dB.grid(row=8,column=2)
 
+#------------------------
+#-- si se presiona Bessel agrega para que le usuario ingrese un tiempo de retardo sino lo oculta
+#------------------------
+    def label_and_entry_BESSEL(self):
 
+        self.label_Tretardo.grid(row=13, column=0)
+        self.entry_Tretardo.grid(row=13,column=1)
+        self.label_microsec.grid(row=13,column=1, sticky='e')
 
+    def hide_label_and_entry_BESSEL(self):
+
+        self.label_Tretardo.grid_forget()
+        self.entry_Tretardo.grid_forget()
+        self.entry_Tretardo.delete(0, END)
+        self.label_microsec.grid_forget()
 
 #------------------
 #-----frames
@@ -329,10 +482,12 @@ class graphs:
         self.entry_Ap0=Entry(self.ventana_izquierda)
         self.entry_Aa0=Entry(self.ventana_izquierda)
 
+
         self.entry_wp1=Entry(self.ventana_izquierda)
         self.entry_wa1=Entry(self.ventana_izquierda)
         self.entry_Ap1=Entry(self.ventana_izquierda)
         self.entry_Aa1=Entry(self.ventana_izquierda)
+
 
 
         self.labels_and_entrys_BPBS()
@@ -387,10 +542,15 @@ class graphs:
         self.entry_Q=Entry(self.ventana_izquierda)
 
 
+#tiempo de retardo para Bessel
+
+        self.label_Tretardo=Label(self.ventana_izquierda,text="Tiempo de retardo:")
+        self.entry_Tretardo=Entry(self.ventana_izquierda)
+        self.label_microsec=Label(self.ventana_izquierda,text="microsec")
 
 #boton graficar
-        button_select=Button(self.ventana_izquierda, text="   Graph   ")#, command=self.Se_Apreto_Graph())
-        button_select.grid(row=12,columnspan=50)
+        button_select=Button(self.ventana_izquierda, text="       Graph       ", command=self.Se_Apreto_Graph)
+        button_select.grid(row=14,columnspan=20, padx=10, pady=10)
 
 #-----------------------------------------------------------
 
@@ -403,7 +563,7 @@ class graphs:
         self.ventana_derecha.grid(row=0,column=1)
 
         buttonMag = Button(self.ventana_derecha,text="Bode Magnitude")
-        buttonMag.grid(row=0, column=0,padx=10,pady=10)
+        buttonMag.grid(row=0, column=0,padx=40,pady=10)
         buttonPhase = Button(self.ventana_derecha,text="Bode Phase")
         buttonPhase.grid(row=0, column=1,padx=10,pady=10)
         buttonStep = Button(self.ventana_derecha,text="Step")
