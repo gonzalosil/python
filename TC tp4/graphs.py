@@ -8,7 +8,7 @@ from matplotlib.figure import Figure
 from tkinter import *
 from tkinter import ttk
 import numpy as np
-
+import Chevy_1
 
 class graphs:
 
@@ -69,10 +69,8 @@ class graphs:
 #----funciones de seteo de tipo de filtro
 #------------------------------------------------------------------------
 
-    def set_low_pass(self):
-        self.num=[1]
-        self.den=[1,1]
-        self.sys = signal.TransferFunction([1],[1,1])
+    def set_filter(self, TransferFuntion):
+        self.sys = TransferFuntion
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
@@ -80,39 +78,6 @@ class graphs:
         self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
         self.plotMag()
 
-    def set_high_pass(self):
-        self.num=[1,0]
-        self.den=[1,1]
-        self.sys = signal.TransferFunction([1,0],[1,1])
-        self.w,self.mag,self.phase = signal.bode(self.sys)
-        self.stepT,self.stepMag = signal.step(self.sys)
-        self.impT,self.impMag = signal.impulse(self.sys)
-        self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
-        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
-        print (self.pzg[0].size)
-        self.plotMag()
-
-    def set_band_pass(self):
-        self.num=[1,0]
-        self.den=[1,1,1]
-        self.sys = signal.TransferFunction([1,0],[1,1,1])
-        self.w,self.mag,self.phase = signal.bode(self.sys)
-        self.stepT,self.stepMag = signal.step(self.sys)
-        self.impT,self.impMag = signal.impulse(self.sys)
-        self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
-        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
-        self.plotMag()
-
-    def set_band_stop(self):
-        self.num=[1,0,1]
-        self.den=[1,1,1]
-        self.sys = signal.TransferFunction([1,0,1],[1,1,1])
-        self.w,self.mag,self.phase = signal.bode(self.sys)
-        self.stepT,self.stepMag = signal.step(self.sys)
-        self.impT,self.impMag = signal.impulse(self.sys)
-        self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
-        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
-        self.plotMag()
 
 #----------------------------------------------------------------------------------------------
 #--Se aprieta el boton Select y se ponen las entrys dependiendo el tipo de filtro y aproximacion
@@ -142,19 +107,19 @@ class graphs:
 
         FilterSelected=self.Type_of_filter.get()
 
-        if FilterSelected=="Low Pass":
+        if FilterSelected=="LP":
            #print(FilterSelected)
            self.labels_and_entrys_LPHP()
            #self.set_low_pass()
-        elif  FilterSelected=="High Pass":
+        elif  FilterSelected=="HP":
             #print(FilterSelected)
             self.labels_and_entrys_LPHP()
             #self.set_high_pass()
-        elif  FilterSelected=="Band Pass":
+        elif  FilterSelected=="BP":
             #print(FilterSelected)
             self.labels_and_entrys_BPBS()
             #self.set_band_pass()
-        elif FilterSelected=="Band Stop":
+        elif FilterSelected=="BR":
             #print(FilterSelected)
             self.labels_and_entrys_BPBS()
             #self.set_band_stop()
@@ -257,32 +222,34 @@ class graphs:
         print(Q) #dato
 
         #if ApproxSelected=="Butterworth":
-        #elif  ApproxSelected=="Chebycheff":
-        #elif  ApproxSelected=="Chebycheff Inverso":
         #elif
-        if ApproxSelected=="Bessel":
+        if  ApproxSelected=="Chebycheff":
+            Chevy_1(self, Ap0, Aa0, wp0, wa0, FilterSelected, Wp_mas=wp1, Ws_mas=wa1 )
+        #elif  ApproxSelected=="Chebycheff Inverso":
+        #el
+        elif ApproxSelected=="Bessel":
             Tretardo=int(self.entry_Tretardo.get())
             print(Tretardo)
-        #else:
-        #   print("unknown")
+        else:
+           print("unknown")
 
 
 
         FilterSelected=self.Type_of_filter.get()
 
-        if FilterSelected=="Low Pass":
+        if FilterSelected=="LP":
            #print(FilterSelected)
            self.labels_and_entrys_LPHP()
            #self.set_low_pass()
-        elif  FilterSelected=="High Pass":
+        elif  FilterSelected=="HP":
             #print(FilterSelected)
             self.labels_and_entrys_LPHP()
             #self.set_high_pass()
-        elif  FilterSelected=="Band Pass":
+        elif  FilterSelected=="BP":
             #print(FilterSelected)
             self.labels_and_entrys_BPBS()
             #self.set_band_pass()
-        elif FilterSelected=="Band Stop":
+        elif FilterSelected=="BR":
             #print(FilterSelected)
             self.labels_and_entrys_BPBS()
             #self.set_band_stop()
@@ -330,23 +297,23 @@ class graphs:
     def labels_and_entrys_LPHP(self):
         self.label_wp0.grid_forget()
         self.label_wa0.grid_forget()
-        self.label_Ap0.grid_forget()
-        self.label_Aa0.grid_forget()
+        #self.label_Ap0.grid_forget()
+        #self.label_Aa0.grid_forget()
 
         self.label_wp1.grid_forget()
         self.label_wa1.grid_forget()
-        self.label_Ap1.grid_forget()
-        self.label_Aa1.grid_forget()
+        #self.label_Ap1.grid_forget()
+        #self.label_Aa1.grid_forget()
 
         self.entry_wp1.grid_forget()
         self.entry_wa1.grid_forget()
-        self.entry_Ap1.grid_forget()
-        self.entry_Aa1.grid_forget()
+        #self.entry_Ap1.grid_forget()
+        #self.entry_Aa1.grid_forget()
 
         self.entry_wp1.delete(0, END)
         self.entry_wa1.delete(0, END)
-        self.entry_Ap1.delete(0, END)
-        self.entry_Aa1.delete(0, END)
+        #self.entry_Ap1.delete(0, END)
+        #self.entry_Aa1.delete(0, END)
         
 
         self.label_Hz.grid_forget()
@@ -356,8 +323,8 @@ class graphs:
 
         self.label_wp.grid(row=1,column=0)
         self.label_wa.grid(row=2,column=0)
-        self.label_Ap.grid(row=3,column=0)
-        self.label_Aa.grid(row=4,column=0)
+        #self.label_Ap.grid(row=3,column=0)
+        #self.label_Aa.grid(row=4,column=0)
 
 #----entrys para band pass y band stop
     def labels_and_entrys_BPBS(self):
@@ -369,13 +336,13 @@ class graphs:
 
         self.label_wp.grid_forget()
         self.label_wa.grid_forget()
-        self.label_Ap.grid_forget()
-        self.label_Aa.grid_forget()
+        #self.label_Ap.grid_forget()
+        #self.label_Aa.grid_forget()
 
         self.label_wp1.grid(row=5,column=0)
         self.label_wa1.grid(row=6,column=0)
-        self.label_Ap1.grid(row=7,column=0)
-        self.label_Aa1.grid(row=8,column=0)
+        #self.label_Ap1.grid(row=7,column=0)
+        #self.label_Aa1.grid(row=8,column=0)
 
         self.entry_wp0.grid(row=1,column=1)
         self.entry_wa0.grid(row=2,column=1)
@@ -384,8 +351,8 @@ class graphs:
 
         self.entry_wp1.grid(row=5,column=1)
         self.entry_wa1.grid(row=6,column=1)
-        self.entry_Ap1.grid(row=7,column=1)
-        self.entry_Aa1.grid(row=8,column=1)
+        #self.entry_Ap1.grid(row=7,column=1)
+        #self.entry_Aa1.grid(row=8,column=1)
 
         self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
         self.label_Hz.grid(row=1,column=2)
@@ -434,7 +401,7 @@ class graphs:
     
         self.ventana_izquierda=Frame(self.root)
 
-        self.ventana_izquierda.grid(row=0,column=0)
+        self.ventana_izquierda.grid(row=1,column=0)
 
 #Seleccionador de aproximacion
         
@@ -445,7 +412,7 @@ class graphs:
    
 #Seleccionador de tipo de filtro
 
-        values_filter=["Low Pass","High Pass","Band Pass","Band Stop"]
+        values_filter=["LP","HP","BP","BR"]
         self.Type_of_filter=ttk.Combobox(self.ventana_izquierda,values=values_filter, width=20,state="readonly")
         self.Type_of_filter.set("Select Type of Filter")
         self.Type_of_filter.grid(row=0,column=1,padx=10,pady=10)
@@ -460,20 +427,20 @@ class graphs:
 
 #Frecuencias y atenuaciones 
 
-        self.label_wp0=Label(self.ventana_izquierda,text="Wp(+):")
-        self.label_wa0=Label(self.ventana_izquierda,text="Wa(+):")
-        self.label_Ap0=Label(self.ventana_izquierda,text="Ap(+):")
-        self.label_Aa0=Label(self.ventana_izquierda,text="Aa(+):")
+        self.label_wp0=Label(self.ventana_izquierda,text="Wp(-):")
+        self.label_wa0=Label(self.ventana_izquierda,text="Wa(-):")
+        self.label_Ap0=Label(self.ventana_izquierda,text="Ap:")
+        self.label_Aa0=Label(self.ventana_izquierda,text="Aa:")
 
         self.label_wp=Label(self.ventana_izquierda,text="Wp:")
         self.label_wa=Label(self.ventana_izquierda,text="Wa:")
-        self.label_Ap=Label(self.ventana_izquierda,text="Ap:")
-        self.label_Aa=Label(self.ventana_izquierda,text="Aa:")
+        #self.label_Ap=Label(self.ventana_izquierda,text="Ap:")
+        #self.label_Aa=Label(self.ventana_izquierda,text="Aa:")
 
-        self.label_wp1=Label(self.ventana_izquierda,text="Wp(-):")
-        self.label_wa1=Label(self.ventana_izquierda,text="Wa(-):")
-        self.label_Ap1=Label(self.ventana_izquierda,text="Ap(-):")
-        self.label_Aa1=Label(self.ventana_izquierda,text="Aa(-):")
+        self.label_wp1=Label(self.ventana_izquierda,text="Wp(+):")
+        self.label_wa1=Label(self.ventana_izquierda,text="Wa(+):")
+        #self.label_Ap1=Label(self.ventana_izquierda,text="Ap(+):")
+        #self.label_Aa1=Label(self.ventana_izquierda,text="Aa(+):")
 
 
 
@@ -485,8 +452,8 @@ class graphs:
 
         self.entry_wp1=Entry(self.ventana_izquierda)
         self.entry_wa1=Entry(self.ventana_izquierda)
-        self.entry_Ap1=Entry(self.ventana_izquierda)
-        self.entry_Aa1=Entry(self.ventana_izquierda)
+        #self.entry_Ap1=Entry(self.ventana_izquierda)
+        #self.entry_Aa1=Entry(self.ventana_izquierda)
 
 
 
@@ -560,7 +527,7 @@ class graphs:
     
         self.ventana_derecha=Frame(self.root)
 
-        self.ventana_derecha.grid(row=0,column=1)
+        self.ventana_derecha.grid(row=1,column=1)
 
         buttonMag = Button(self.ventana_derecha,text="Bode Magnitude")
         buttonMag.grid(row=0, column=0,padx=40,pady=10)
