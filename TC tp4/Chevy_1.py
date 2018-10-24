@@ -53,16 +53,20 @@ class Chevy_1(object):
         k = self.den[len(self.den)-1]/self.num[len(self.num)-1]
         self.sys = signal.TransferFunction(k*self.num,self.den)
         self.w,self.mag,self.phase = signal.bode(self.sys, None, 10000)
-        pyplot.semilogx(self.w,-self.mag)
-        pyplot.show()
-        self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,2000,800,8000)
-        #self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
         #pyplot.semilogx(self.w,-self.mag)
         #pyplot.show()
+        self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,2000,800,8000)
+        
+    
+    def get_transfer(self):
         return self.H
+
         
 if __name__ == "__main__":
-    ex = Chevy_1(1,100,1000,5000, "BR")
-
+    ex1= Chevy_1(10,100,1000,5000, "LP")
+    ex = Chevy_1.get_transfer(ex1)
+    w,mag,phase = signal.bode(ex, None, 10000)
+    pyplot.semilogx(w,-mag)
+    pyplot.show()
 
 
