@@ -38,18 +38,21 @@ class General_aprox(object):
         self.normalizacion()
         return;
 
-    def denormalization (type, W, n, poles=None, zeros=None): #type se refiere al tipo de filtro que se desea
+    def denormalization (type, W, n, poles=None, zeros=None, Wpmas=None, Wamenos=None, Wamas=None): #type se refiere al tipo de filtro que se desea
+        #si es BP o BR W se usa como Wp- 
         if type == "LP":
             s = c.tf([1,0],[W])
             tf = c.tf([1],[1])
             if zeros != None:
                 for k in range (0,len(zeros)):
                     tf = tf * (s-zeros(k))
-
-            for k in range (0,len(poles)):
-                tf = tf * 1/(s-poles[k])
-            #print(tf.num[0][0])
-            tf = signal.TransferFunction(tf.num[0][0], tf.den[0][0])
+            if poles != None:
+                for k in range (0,len(poles)):
+                    tf = tf * 1/(s-poles[k])
+            #print(tf.den[0][0][len(tf.den[0][0])-1])
+            k = tf.den[0][0][len(tf.den[0][0])-1]/tf.num[0][0][len(tf.num[0][0])-1]
+            tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
+          #  k = tf.den[0][0][0]#/tf.num[0][0][len(tf.num[0][0])-1]
 
         elif type == "HP":
             s = c.tf([W],[1,0])
@@ -57,17 +60,36 @@ class General_aprox(object):
             if zeros != None:
                 for k in range (0,len(zeros)):
                     tf = tf * (s-zeros(k))
-
-            for k in range (0,len(poles)):
-                tf = tf * 1/(s-poles[k])
+            if poles != None:
+                for k in range (0,len(poles)):
+                    tf = tf * 1/(s-poles[k])
             #print(tf.num[0][0])
-            tf = signal.TransferFunction(tf.num[0][0], tf.den[0][0])
+            k = tf.den[0][0][0]/tf.num[0][0][0]
+            tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
+
+        elif type == "BP":
+            Wo=m.sqrt(Wpmas*W)
+            B=(Wpmas-W)/Wo
+            s1=c.tf([1,0],[Wo])
+            s2=c.tf([Wo],[1,0])
+            s=1/B*(s1+s2)
+            tf = c.tf([1],[1])
+
+            if zeros != None:
+                for k in range (0,len(zeros)):
+                    tf = tf * (s-zeros(k))
+            if poles != None:
+                for k in range (0,len(poles)):
+                    tf = tf * 1/(s-poles[k])
+
+            k = tf.num[0][0][0]/tf.den[0][0][0]
+            tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
+
+        elif type == "BR":
+            print("hacer esto")
+            
         return tf
 
-
-
-if __name__ == "__main__":
-    ex=General_aprox.denormalization("LP", 100, 5, [-3.])
     
 
 
