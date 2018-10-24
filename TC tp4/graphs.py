@@ -9,6 +9,7 @@ from tkinter import *
 from tkinter import ttk
 import numpy as np
 import Chevy_1 as Chevy
+from matplotlib import pyplot
 
 class graphs:
 
@@ -69,13 +70,16 @@ class graphs:
 #----funciones de seteo de tipo de filtro
 #------------------------------------------------------------------------
 
-    def set_filter(self, TransferFuntion):
-        self.sys = TransferFunction
+    def set_filter(self):
+        #self.num=[1]
+        #self.den=[1,1]
+        #self.sys = signal.TransferFunction([1],[1,1])
+        #self.sys = TransferFuntion
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
-        self.GDfreq,self.gd = signal.group_delay((self.num,self.den))
+        self.GDfreq,self.gd = signal.group_delay((self.sys.num,self.sys.den))
         self.plotMag()
 
 
@@ -214,8 +218,16 @@ class graphs:
         #if ApproxSelected=="Butterworth":
         #elif
         if  ApproxSelected=="Chebycheff":
-            print("Hola j")
-            #TransferFunction=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
+            #print("Hola j")
+            self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
+            self.sys=Chevy.Chevy_1.get_transfer(self.Function)
+            self.set_filter()
+
+            #w,mag,phase = signal.bode(TransferFunction, None, 10000)
+            #pyplot.semilogx(w,-mag)
+            #pyplot.show()
+
+     
             #self.sys=TransferFunction
             #self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
             #pyplot.semilogx(self.w,-self.mag)
@@ -384,7 +396,16 @@ class graphs:
         self.entry_Tretardo.grid_forget()
         self.entry_Tretardo.delete(0, END)
         self.label_microsec.grid_forget()
+        
 
+    def Se_Apreto_PrimeraEtapa(self):
+        print("Primera Etapa")
+        self.ventana_izquierda.grid(row=1,column=0)
+        self.ventana_derecha.grid(row=1,column=1)
+    def Se_Apreto_SegundaEtapa(self):
+        print("Segunda Etapa")
+        self.ventana_izquierda.grid_forget()
+        self.ventana_derecha.grid_forget()
 #------------------
 #-----frames
 #---------------------------------------------------------------------------------------------------------
@@ -396,12 +417,17 @@ class graphs:
         self.ventana_superior=Frame(self.root)
         self.ventana_superior.grid(row=0,columnspan=20)
 
+        buttonPrimeraEtapa = Button(self.ventana_superior,text="Primera Etapa",command=self.Se_Apreto_PrimeraEtapa)
+        buttonPrimeraEtapa.grid(row=0, column=0,padx=40,pady=10)
+        buttonSegundaEtapa = Button(self.ventana_superior,text="Segunda Etapa",command=self.Se_Apreto_SegundaEtapa)
+        buttonSegundaEtapa.grid(row=0, column=1,padx=10,pady=10)
+
 #---VENTANA IZQUIERDA
 #------------------------------------------------------------------------
     
         self.ventana_izquierda=Frame(self.root)
 
-        self.ventana_izquierda.grid(row=1,column=0)
+       
 
 #Seleccionador de aproximacion
         
@@ -526,8 +552,8 @@ class graphs:
 #------------------------------------------------------------------------
     
         self.ventana_derecha=Frame(self.root)
+        
 
-        self.ventana_derecha.grid(row=1,column=1)
 
         buttonMag = Button(self.ventana_derecha,text="Bode Magnitude",command=self.plotMag)
         buttonMag.grid(row=0, column=0,padx=40,pady=10)
@@ -546,15 +572,15 @@ class graphs:
 
 
         graph = Canvas(self.ventana_derecha, bg="blue")
-        graph.grid(row=1, columnspan=100,padx=10,pady=10)
+        graph.grid(row=1, columnspan=1000,padx=10,pady=10)
 
         f = Figure()
         self.axis = f.add_subplot(111)
 
         self.dataPlot = FigureCanvasTkAgg(f, master=graph)
         self.dataPlot.draw()
-        self.dataPlot.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
-        #nav = NavigationToolbar2Tk(self.dataPlot, ventana_derecha)
+        #self.dataPlot.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+        #nav = NavigationToolbar2Tk(self.dataPlot, self.ventana_derecha)
         #nav.update()
         self.dataPlot._tkcanvas.pack(side=TOP, expand=True)
 
