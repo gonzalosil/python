@@ -306,34 +306,28 @@ class graphs:
     def labels_and_entrys_LPHP(self):
         self.label_wp0.grid_forget()
         self.label_wa0.grid_forget()
-        #self.label_Ap0.grid_forget()
-        #self.label_Aa0.grid_forget()
+
 
         self.label_wp1.grid_forget()
         self.label_wa1.grid_forget()
-        #self.label_Ap1.grid_forget()
-        #self.label_Aa1.grid_forget()
+
 
         self.entry_wp1.grid_forget()
         self.entry_wa1.grid_forget()
-        #self.entry_Ap1.grid_forget()
-        #self.entry_Aa1.grid_forget()
+
 
         self.entry_wp1.delete(0, END)
         self.entry_wa1.delete(0, END)
-        #self.entry_Ap1.delete(0, END)
-        #self.entry_Aa1.delete(0, END)
+
         
 
         self.label_Hz.grid_forget()
-        #self.label_dB.grid_forget()
         self.label_Hz1.grid_forget()
-        #self.label_dB1.grid_forget()
+
 
         self.label_wp.grid(row=1,column=0)
         self.label_wa.grid(row=2,column=0)
-        #self.label_Ap.grid(row=3,column=0)
-        #self.label_Aa.grid(row=4,column=0)
+
 
 #----entrys para band pass y band stop
     def labels_and_entrys_BPBS(self):
@@ -345,13 +339,11 @@ class graphs:
 
         self.label_wp.grid_forget()
         self.label_wa.grid_forget()
-        #self.label_Ap.grid_forget()
-        #self.label_Aa.grid_forget()
+
 
         self.label_wp1.grid(row=5,column=0)
         self.label_wa1.grid(row=6,column=0)
-        #self.label_Ap1.grid(row=7,column=0)
-        #self.label_Aa1.grid(row=8,column=0)
+
 
         self.entry_wp0.grid(row=1,column=1)
         self.entry_wa0.grid(row=2,column=1)
@@ -360,8 +352,7 @@ class graphs:
 
         self.entry_wp1.grid(row=5,column=1)
         self.entry_wa1.grid(row=6,column=1)
-        #self.entry_Ap1.grid(row=7,column=1)
-        #self.entry_Aa1.grid(row=8,column=1)
+
 
         self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
         self.label_Hz.grid(row=1,column=2)
@@ -376,10 +367,7 @@ class graphs:
         self.label_Hz.grid(row=5,column=2)
         self.label_Hz1=Label(self.ventana_izquierda,text="rad/s")
         self.label_Hz1.grid(row=6,column=2)
-        #self.label_dB1=Label(self.ventana_izquierda,text="dB")
-        #self.label_dB1.grid(row=7,column=2)
-        #self.label_dB=Label(self.ventana_izquierda,text="dB")
-        #self.label_dB.grid(row=8,column=2)
+
 
 #------------------------
 #-- si se presiona Bessel agrega para que le usuario ingrese un tiempo de retardo sino lo oculta
@@ -460,13 +448,10 @@ class graphs:
 
         self.label_wp=Label(self.ventana_izquierda,text="Wp:")
         self.label_wa=Label(self.ventana_izquierda,text="Wa:")
-        #self.label_Ap=Label(self.ventana_izquierda,text="Ap:")
-        #self.label_Aa=Label(self.ventana_izquierda,text="Aa:")
 
         self.label_wp1=Label(self.ventana_izquierda,text="Wp(+):")
         self.label_wa1=Label(self.ventana_izquierda,text="Wa(+):")
-        #self.label_Ap1=Label(self.ventana_izquierda,text="Ap(+):")
-        #self.label_Aa1=Label(self.ventana_izquierda,text="Aa(+):")
+
 
 
 
@@ -478,8 +463,7 @@ class graphs:
 
         self.entry_wp1=Entry(self.ventana_izquierda)
         self.entry_wa1=Entry(self.ventana_izquierda)
-        #self.entry_Ap1=Entry(self.ventana_izquierda)
-        #self.entry_Aa1=Entry(self.ventana_izquierda)
+
 
 
 
