@@ -2,6 +2,9 @@ import sympy as sp
 from scipy import signal
 from decimal import *
 from numpy import roots, nditer
+import numpy
+
+DESMIN= 1e-6
 
 def Obtener_coef(expr,var):
     num, denom = expr.as_numer_denom()
@@ -29,3 +32,8 @@ def conseguir_tf(exp, var, poles = []):
     tf = signal.lti(value[0], value[1])
 
     return tf
+
+
+def comparar(a,b):
+    result=numpy.abs(a-b)
+    return (result < DESMIN)
