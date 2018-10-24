@@ -87,22 +87,59 @@ class Butterworth(General.General_aprox):
             self.qmax=self.Q[(len(self.Q)-1)]
         return;
 
-    def separar_a_ordenes_menores(self):
+
+    ##
+    def separar_a_ordenes_menores(self,raices):
+        ##me devuelve un arreglo con todos los raices sacandoles las conjugadas 
         aux=[]
         test=0
-        for i in range(0,len(self.polos)):
-            if(np.abs(np.imag(self.polos[i])) < 0.00000001):
-                aux.append(self.polos[i]) #para polos con parte iimagianaria igual a 0
+        
+        if (len(raices) == 0):
+            return aux;
+        else:
+            for i in range(0,len(raices)):
+                if(np.abs(np.imag(raices[i])) < 1e-6):
+                    aux.append(raices[i]) #para polos con parte iimagianaria igual a 0
+                else:
+                    #test=(cmath.polar((np.conjugate(self.polos[i]))))
+                    #control=self.polos[i]
+                    for j in range (i+1,len(raices)):
+                        compR1=np.abs(np.real(raices[i]))
+                        compR2=np.abs(np.real(raices[j]))
+                        compIm1=np.abs(np.imag(raices[i]))
+                        compIm2=np.abs(np.imag(raices[j]))
+                        #comparar las partes reales
+                        if(cuentas.comparar(compR1,compR2)):
+                            if(cuentas.comparar(compIm1,compIm2)):
+                                aux.append(raices[i])
+
+                     #   b=(cmath.polar(self.polos[j]))
+                        #if ((np.abs(self.polos[i]) ) == (np.abs(self.polos[j]))):
+                        #    if( (cmath.phase(self.polos[i])) == (-1*cmath.phase(self.polos[j])) ):
+
+            return aux;
+
+    def armar_transferencias(self, raices):
+        ##devuelve un arreglo donde se encuentran las raices de los distintos polinomios de orden 1 y 2 
+        coef_de_transferencias=[]
+        for i in range(0,len(raices)):
+            a=raices[i]
+            if((np.abs(np.imag(raices[i]))) < 1e-6):
+                coef_de_transferencias.append(raices[i])
             else:
-                #test=(cmath.polar((np.conjugate(self.polos[i]))))
-                for j in range (i+1,len(self.polos)):
-                 #   b=(cmath.polar(self.polos[j]))
-                    if ((np.abs(self.polos[i]) ) == (np.abs(self.polos[j]))):
-                        if( (cmath.phase(self.polos[i])) == (-1*cmath.phase(self.polos[j])) ):
-                            aux.append(self.polos[i])
-        return aux;
+                aux=[raices[i],np.conjugate(raices[i])]
+                coef_de_transferencias.append(aux)
+
+        return coef_de_transferencias;
+
+                
+
+
+        
+
 
                         
+   
 
 
                 

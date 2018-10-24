@@ -4,6 +4,8 @@ import Butterworth
 import scipy as sp
 from scipy import signal
 import math
+import numpy
+import sympy
 
 import matplotlib 
 matplotlib.use('TkAgg')
@@ -13,19 +15,48 @@ from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.figure import Figure
 from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
+import Transfer_Maker 
 
 test=Butterworth.Butterworth(20,0.5,2000,1000,0,0,0,0,2,"HP",0)
+x=sympy.Symbol('x')
+#print(test.polos)
+#print(test.zeros)
+a=(numpy.poly1d(test.Transferencia_desnorm.num))
+print(a)
+b=(numpy.poly1d(test.Transferencia_desnorm.den))
+print(b)
+print(test.polos,"raciessss")
+print(numpy.roots(b),"raices denom")
+#print(sympy.Poly(a,x).all_coeffs(),"asfasdasdsaf")
+#print(sympy.Poly(b,x).all_coeffs(),"asfasdasdsafasdfffff")
 
-print(test.polos)
+#prueba=Transfer_Maker.Transfer_Maker(test.zeros,test.polos)
+#print(prueba.Transferencias_de_polos,"transferencias de los polos" )
+#print(prueba.Media_TransfersDeZeros,"transferencias de los zeros")
 
-print(" ")
-print(test.separar_a_ordenes_menores())
+
+######################## PRUEBAS TRANSFER MAKER ################################
+a=(test.separar_a_ordenes_menores(numpy.roots(b)))
+print(a,"ashhhhhhh")
+#print(a,"el de butter")
+#print(prueba.polos_separados,"el de transfer maker")
+
+a=(test.armar_transferencias(a))
+print(a,"el de butter")
+#print(prueba.Media_TransferDePolos, "el de tfm")
+######################## PRUEBAS TRANSFER MAKER ################################
 
 
-#w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
-#xscale('log')
-#plot(w,mag)
-#show()
+
+#print(" ")
+#print(test.separar_a_ordenes_menores(test.zeros))
+
+#print(test.armar_transferencias(a))
+
+w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
+xscale('log')
+plot(w,mag)
+show()
 
 #wachin=test.conseguir_polos_por_separado()
 #print(wachin)
