@@ -56,9 +56,10 @@ class Chevy_1(object):
         pyplot.semilogx(self.w,-self.mag)
         pyplot.show()
         self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,2000,800,8000)
-        self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
-        pyplot.semilogx(self.w,-self.mag)
-        pyplot.show()
+        #self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
+        #pyplot.semilogx(self.w,-self.mag)
+        #pyplot.show()
+        return self.H
         
 if __name__ == "__main__":
     ex = Chevy_1(1,100,1000,5000, "BR")
