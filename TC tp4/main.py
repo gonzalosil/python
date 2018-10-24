@@ -14,16 +14,16 @@ from matplotlib.figure import Figure
 from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
 
-test=Butterworth.Butterworth(20,0.5,1000,2000,0,0,0,0,2,"LP",0)
+test=Butterworth.Butterworth(20,0.5,2000,1000,0,0,0,0,2,"HP",0)
 
 print(test.polos)
 
 
 
-#w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
-#xscale('log')
-#plot(w,mag)
-#show()
+w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
+xscale('log')
+plot(w,mag)
+show()
 
 #wachin=test.conseguir_polos_por_separado()
 #print(wachin)

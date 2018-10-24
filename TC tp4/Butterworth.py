@@ -66,18 +66,18 @@ class Butterworth(General.General_aprox):
         self.Transferencia_norm=signal.TransferFunction(self.num,self.denom) 
         
         self.denom=np.poly1d([1])
-        wc = self.wp /(self.epsilon**(1/self.n))
-        ##CAMBIAR POR FUNCION QUE DESNORMALIZA
-        for i in range(0,len(self.polos)):
-            #poli=np.poly1d([-self.polos[i],wc])
-            poli=np.poly1d([(1/wc),-self.polos[i]])           #pasabajos
-            self.denom=self.denom*poli
+        if(self.tipo == "LP"):
+            wc = self.wp /(self.epsilon**(1/self.n))
+        elif(self.tipo == "HP"):
+            wc = self.wp * (self.epsilon**(1/self.n))
+            ##CAMBIAR POR FUNCION QUE DESNORMALIZA
+        self.Transferencia_desnorm=self.denormalization(self.tipo,wc,self.n,self.polos)
         
         #poli_denor=np.poly1d([1,0])
         #self.denom=self.denom*poli_denor
         #self.num=self.num*poli_denor
         #print("aca viene el arreglo flashero")
-        self.Transferencia_desnorm=signal.TransferFunction(self.num,self.denom)
+#        self.Transferencia_desnorm=signal.TransferFunction(self.num,self.denom)
         return;
  #       self.Transferencia=sp.signal.zpk2tf(self.zeros,self.polos,1)
         #print(self.Transferencia)
