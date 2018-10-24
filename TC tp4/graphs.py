@@ -8,7 +8,7 @@ from matplotlib.figure import Figure
 from tkinter import *
 from tkinter import ttk
 import numpy as np
-import Chevy_1
+import Chevy_1 as Chevy
 
 class graphs:
 
@@ -70,7 +70,7 @@ class graphs:
 #------------------------------------------------------------------------
 
     def set_filter(self, TransferFuntion):
-        self.sys = TransferFuntion
+        self.sys = TransferFunction
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
@@ -191,17 +191,7 @@ class graphs:
             wa1=None
         print(wa1) #dato
 
-        if len(self.entry_Ap1.get()) != 0:
-            Ap1=int(self.entry_Ap1.get())
-        else:
-            Ap1=None
-        print(Ap1) #dato
 
-        if len(self.entry_Aa1.get()) != 0:
-            Aa1=int(self.entry_Aa1.get())
-        else:
-            Aa1=None
-        print(Aa1) #dato
 
         #orden del filtro
 
@@ -224,7 +214,14 @@ class graphs:
         #if ApproxSelected=="Butterworth":
         #elif
         if  ApproxSelected=="Chebycheff":
-            Chevy_1(self, Ap0, Aa0, wp0, wa0, FilterSelected, Wp_mas=wp1, Ws_mas=wa1 )
+            print("Hola j")
+            #TransferFunction=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
+            #self.sys=TransferFunction
+            #self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
+            #pyplot.semilogx(self.w,-self.mag)
+            #pyplot.show()
+            #self.set_filter(TransferFuction)
+            #print(TransferFuction)
         #elif  ApproxSelected=="Chebycheff Inverso":
         #el
         elif ApproxSelected=="Bessel":
@@ -317,9 +314,9 @@ class graphs:
         
 
         self.label_Hz.grid_forget()
-        self.label_dB.grid_forget()
+        #self.label_dB.grid_forget()
         self.label_Hz1.grid_forget()
-        self.label_dB1.grid_forget()
+        #self.label_dB1.grid_forget()
 
         self.label_wp.grid(row=1,column=0)
         self.label_wa.grid(row=2,column=0)
@@ -367,10 +364,10 @@ class graphs:
         self.label_Hz.grid(row=5,column=2)
         self.label_Hz1=Label(self.ventana_izquierda,text="rad/s")
         self.label_Hz1.grid(row=6,column=2)
-        self.label_dB1=Label(self.ventana_izquierda,text="dB")
-        self.label_dB1.grid(row=7,column=2)
-        self.label_dB=Label(self.ventana_izquierda,text="dB")
-        self.label_dB.grid(row=8,column=2)
+        #self.label_dB1=Label(self.ventana_izquierda,text="dB")
+        #self.label_dB1.grid(row=7,column=2)
+        #self.label_dB=Label(self.ventana_izquierda,text="dB")
+        #self.label_dB.grid(row=8,column=2)
 
 #------------------------
 #-- si se presiona Bessel agrega para que le usuario ingrese un tiempo de retardo sino lo oculta
@@ -395,6 +392,9 @@ class graphs:
         self.root = Tk()
         self.root.title("TP 4 - Grupo 6 - Teoria de Circuitos - 2018")
 
+            
+        self.ventana_superior=Frame(self.root)
+        self.ventana_superior.grid(row=0,columnspan=20)
 
 #---VENTANA IZQUIERDA
 #------------------------------------------------------------------------
@@ -517,7 +517,7 @@ class graphs:
 
 #boton graficar
         button_select=Button(self.ventana_izquierda, text="       Graph       ", command=self.Se_Apreto_Graph)
-        button_select.grid(row=14,columnspan=20, padx=10, pady=10)
+        button_select.grid(row=14,columnspan=20, padx=2, pady=2)
 
 #-----------------------------------------------------------
 
@@ -529,19 +529,21 @@ class graphs:
 
         self.ventana_derecha.grid(row=1,column=1)
 
-        buttonMag = Button(self.ventana_derecha,text="Bode Magnitude")
+        buttonMag = Button(self.ventana_derecha,text="Bode Magnitude",command=self.plotMag)
         buttonMag.grid(row=0, column=0,padx=40,pady=10)
-        buttonPhase = Button(self.ventana_derecha,text="Bode Phase")
+        buttonPhase = Button(self.ventana_derecha,text="Bode Phase",command=self.plotPhase)
         buttonPhase.grid(row=0, column=1,padx=10,pady=10)
-        buttonStep = Button(self.ventana_derecha,text="Step")
+        buttonStep = Button(self.ventana_derecha,text="Step",command=self.plotStep)
         buttonStep.grid(row=0, column=2,padx=10,pady=10)
-        buttonImp = Button(self.ventana_derecha,text="Impulse")
+        buttonImp = Button(self.ventana_derecha,text="Impulse",command=self.plotImp)
         buttonImp.grid(row=0, column=3,padx=10,pady=10)
-        buttonPZ = Button(self.ventana_derecha,text="Poles and Zeros")
+        buttonPZ = Button(self.ventana_derecha,text="Poles and Zeros",command=self.plotPZ)
         buttonPZ.grid(row=0, column=4,padx=10,pady=10)
-        buttonGD = Button(self.ventana_derecha,text="Group Delay")
+        buttonGD = Button(self.ventana_derecha,text="Group Delay",command=self.plotGroupDelay)
         buttonGD.grid(row=0, column=5,padx=10,pady=10)
        
+
+
 
         graph = Canvas(self.ventana_derecha, bg="blue")
         graph.grid(row=1, columnspan=100,padx=10,pady=10)

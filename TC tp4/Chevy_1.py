@@ -18,7 +18,7 @@ class Chevy_1(object):
         n=m.ceil(m.acosh((m.sqrt(m.pow(10,As/10)-1))/e)/(m.acosh(Ws/Wp)))
 
         #hallo los polos de chevy
-
+        print("hola mijo")
         alpha = []
         beta = []
         sigma = []
@@ -53,10 +53,10 @@ class Chevy_1(object):
         k = self.den[len(self.den)-1]/self.num[len(self.num)-1]
         self.sys = signal.TransferFunction(k*self.num,self.den)
         self.w,self.mag,self.phase = signal.bode(self.sys, None, 10000)
-        pyplot.semilogx(self.w,-self.mag)
-        pyplot.show()
+        #pyplot.semilogx(self.w,-self.mag)
+        #pyplot.show()
         self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,2000,800,8000)
-        #self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
+        self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
         #pyplot.semilogx(self.w,-self.mag)
         #pyplot.show()
         return self.H

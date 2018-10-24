@@ -1,6 +1,6 @@
 import math as m
 from scipy import signal
-#import control as c
+import control as c
 
 class General_aprox(object):
 
