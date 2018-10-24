@@ -115,11 +115,160 @@ class graphs:
         self.plotMag()
 
 #-------------------------------------------------------------------------
+#--Se aprieta el boton Select
+#-------------------------------
+    def Se_Apreto_Select(self):
+
+        #--- aca sabemos el tipo de aproximacion y filtro que se selecciono
+
+        ApproxSelected=self.Type_of_approx.get()
+
+        if ApproxSelected=="Butterworth":
+           print(ApproxSelected)
+        elif  ApproxSelected=="Chebycheff":
+            print(ApproxSelected)
+        elif  ApproxSelected=="Chebycheff Inverso":
+            print(ApproxSelected)
+        elif ApproxSelected=="Bessel":
+            print(ApproxSelected)
+        else:
+            print("unknown")
+
+
+
+        FilterSelected=self.Type_of_filter.get()
+
+        if FilterSelected=="Low Pass":
+           print(FilterSelected)
+           self.labels_and_entrys_LPHP()
+           #self.set_low_pass()
+        elif  FilterSelected=="High Pass":
+            print(FilterSelected)
+            self.labels_and_entrys_LPHP()
+            #self.set_high_pass()
+        elif  FilterSelected=="Band Pass":
+            print(FilterSelected)
+            self.labels_and_entrys_BPBS()
+            #self.set_band_pass()
+        elif FilterSelected=="Band Stop":
+            print(FilterSelected)
+            self.labels_and_entrys_BPBS()
+            #self.set_band_stop()
+        else:
+            print("unknown")
+
+#---------------
+#--aca se eligio la frecuencia de denormalizacion
+#--habilito o deshabilito la opcion de poner un porcentaje
+#---------------
+    def selection_of_DenormFrec_changed(self, event):
+        Selected_Denorm_Frec=self.Denormalize_frec.get()
+        if Selected_Denorm_Frec=="Wother":
+            self.entry_Denorm_percentage.grid(row=9,column=3)
+            self.label_percentage.grid(row=9,column=4)
+        else:
+            self.entry_Denorm_percentage.grid_forget()
+            self.label_percentage.grid_forget()
+            
+
+
+
+    def CheckBotton_Orden_HIGH(self):
+
+        Selected_checkbotton_orden=self.var_Orden.get()
+        if Selected_checkbotton_orden:
+            self.entry_orden.grid(row=10,column=3)
+        else:
+            self.entry_orden.grid_forget()
+
+    def CheckBotton_Q_HIGH(self):
+
+        Selected_checkbotton_Q=self.var_Q.get()
+        if Selected_checkbotton_Q:
+            self.entry_Q.grid(row=11,column=3)
+        else:
+            self.entry_Q.grid_forget()
+
+#---entrys para low pass y high pass
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+#---oculta algunos labels y entry cuando estoy en HP o LP, ojo!! igualmente tomar los datos del ENTRY de w0 porque eso no cambia, solo cambia el label
+#-----------------------------------------------------------------------------------------------------------------------------------------------------
+    def labels_and_entrys_LPHP(self):
+        self.label_wp0.grid_forget()
+        self.label_wa0.grid_forget()
+        self.label_Ap0.grid_forget()
+        self.label_Aa0.grid_forget()
+
+        self.label_wp1.grid_forget()
+        self.label_wa1.grid_forget()
+        self.label_Ap1.grid_forget()
+        self.label_Aa1.grid_forget()
+
+        self.entry_wp1.grid_forget()
+        self.entry_wa1.grid_forget()
+        self.entry_Ap1.grid_forget()
+        self.entry_Aa1.grid_forget()
+
+        self.label_Hz.grid_forget()
+        self.label_dB.grid_forget()
+        self.label_Hz1.grid_forget()
+        self.label_dB1.grid_forget()
+
+        self.label_wp.grid(row=1,column=0)
+        self.label_wa.grid(row=2,column=0)
+        self.label_Ap.grid(row=3,column=0)
+        self.label_Aa.grid(row=4,column=0)
+
+#----entrys para band pass y band stop
+    def labels_and_entrys_BPBS(self):
+
+        self.label_wp0.grid(row=1,column=0)
+        self.label_wa0.grid(row=2,column=0)
+        self.label_Ap0.grid(row=3,column=0)
+        self.label_Aa0.grid(row=4,column=0)
+
+        self.label_wp.grid_forget()
+        self.label_wa.grid_forget()
+        self.label_Ap.grid_forget()
+        self.label_Aa.grid_forget()
+
+        self.label_wp1.grid(row=5,column=0)
+        self.label_wa1.grid(row=6,column=0)
+        self.label_Ap1.grid(row=7,column=0)
+        self.label_Aa1.grid(row=8,column=0)
+
+        self.entry_wp0.grid(row=1,column=1)
+        self.entry_wa0.grid(row=2,column=1)
+        self.entry_Ap0.grid(row=3,column=1)
+        self.entry_Aa0.grid(row=4,column=1)
+
+        self.entry_wp1.grid(row=5,column=1)
+        self.entry_wa1.grid(row=6,column=1)
+        self.entry_Ap1.grid(row=7,column=1)
+        self.entry_Aa1.grid(row=8,column=1)
+
+        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz.grid(row=1,column=2)
+        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz.grid(row=2,column=2)
+        self.label_dB=Label(self.ventana_izquierda,text="dB")
+        self.label_dB.grid(row=3,column=2)
+        self.label_dB=Label(self.ventana_izquierda,text="dB")
+        self.label_dB.grid(row=4,column=2)
+
+        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz.grid(row=5,column=2)
+        self.label_Hz1=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz1.grid(row=6,column=2)
+        self.label_dB1=Label(self.ventana_izquierda,text="dB")
+        self.label_dB1.grid(row=7,column=2)
+        self.label_dB=Label(self.ventana_izquierda,text="dB")
+        self.label_dB.grid(row=8,column=2)
 
 
 
 
-
+#------------------
 #-----frames
 #---------------------------------------------------------------------------------------------------------
     def __init__(self):
@@ -130,144 +279,117 @@ class graphs:
 #---VENTANA IZQUIERDA
 #------------------------------------------------------------------------
     
-        ventana_izquierda=Frame(self.root)
+        self.ventana_izquierda=Frame(self.root)
 
-        ventana_izquierda.grid(row=0,column=0)
+        self.ventana_izquierda.grid(row=0,column=0)
 
 #Seleccionador de aproximacion
         
         values_approx=["Butterworth","Chebycheff","Chebycheff Inverso","Bessel"]
-        Type_of_approx=ttk.Combobox(ventana_izquierda,values=values_approx, width=20)
-        Type_of_approx.set("Select Appoximation")
-        Type_of_approx.grid(row=0,column=0,padx=40,pady=10)
-
-
+        self.Type_of_approx=ttk.Combobox(self.ventana_izquierda,values=values_approx, width=30,state="readonly")
+        self.Type_of_approx.set("Select Appoximation")
+        self.Type_of_approx.grid(row=0,column=0,padx=40,pady=10)
+   
 #Seleccionador de tipo de filtro
 
         values_filter=["Low Pass","High Pass","Band Pass","Band Stop"]
-        Type_of_filter=ttk.Combobox(ventana_izquierda,values=values_filter, width=20)
-        Type_of_filter.set("Select Type of Filter")
-        Type_of_filter.grid(row=0,column=1,padx=10,pady=10)
+        self.Type_of_filter=ttk.Combobox(self.ventana_izquierda,values=values_filter, width=20,state="readonly")
+        self.Type_of_filter.set("Select Type of Filter")
+        self.Type_of_filter.grid(row=0,column=1,padx=10,pady=10)
 
 
 #boton seleccionador
-        button_select=Button(ventana_izquierda, text="   Select   ")
+        button_select=Button(self.ventana_izquierda, text="   Select   ", command=self.Se_Apreto_Select)
         button_select.grid(row=0,column=3)
 
 
 
 
-#Frecuencias y atenuaciones
+#Frecuencias y atenuaciones 
 
-        label_wp0=Label(ventana_izquierda,text="Wp+:")
-        label_wa0=Label(ventana_izquierda,text="Wa+:")
-        label_Ap0=Label(ventana_izquierda,text="Ap+:")
-        label_Aa0=Label(ventana_izquierda,text="Aa+:")
+        self.label_wp0=Label(self.ventana_izquierda,text="Wp(+):")
+        self.label_wa0=Label(self.ventana_izquierda,text="Wa(+):")
+        self.label_Ap0=Label(self.ventana_izquierda,text="Ap(+):")
+        self.label_Aa0=Label(self.ventana_izquierda,text="Aa(+):")
 
-        label_wp1=Label(ventana_izquierda,text="Wp-:")
-        label_wa1=Label(ventana_izquierda,text="Wa-:")
-        label_Ap1=Label(ventana_izquierda,text="Ap-:")
-        label_Aa1=Label(ventana_izquierda,text="Aa-:")
+        self.label_wp=Label(self.ventana_izquierda,text="Wp:")
+        self.label_wa=Label(self.ventana_izquierda,text="Wa:")
+        self.label_Ap=Label(self.ventana_izquierda,text="Ap:")
+        self.label_Aa=Label(self.ventana_izquierda,text="Aa:")
 
-
-
-        entry_wp0=Entry(ventana_izquierda)
-        entry_wa0=Entry(ventana_izquierda)
-        entry_Ap0=Entry(ventana_izquierda)
-        entry_Aa0=Entry(ventana_izquierda)
-
-        entry_wp1=Entry(ventana_izquierda)
-        entry_wa1=Entry(ventana_izquierda)
-        entry_Ap1=Entry(ventana_izquierda)
-        entry_Aa1=Entry(ventana_izquierda)
+        self.label_wp1=Label(self.ventana_izquierda,text="Wp(-):")
+        self.label_wa1=Label(self.ventana_izquierda,text="Wa(-):")
+        self.label_Ap1=Label(self.ventana_izquierda,text="Ap(-):")
+        self.label_Aa1=Label(self.ventana_izquierda,text="Aa(-):")
 
 
-        label_wp0.grid(row=1,column=0)
-        label_wa0.grid(row=2,column=0)
-        label_Ap0.grid(row=3,column=0)
-        label_Aa0.grid(row=4,column=0)
 
-        label_wp1.grid(row=5,column=0)
-        label_wa1.grid(row=6,column=0)
-        label_Ap1.grid(row=7,column=0)
-        label_Aa1.grid(row=8,column=0)
+        self.entry_wp0=Entry(self.ventana_izquierda)
+        self.entry_wa0=Entry(self.ventana_izquierda)
+        self.entry_Ap0=Entry(self.ventana_izquierda)
+        self.entry_Aa0=Entry(self.ventana_izquierda)
 
-#unidades
-        label_Hz=Label(ventana_izquierda,text="rad/s")
-        label_Hz.grid(row=1,column=2)
-        label_Hz=Label(ventana_izquierda,text="rad/s")
-        label_Hz.grid(row=2,column=2)
-        label_dB=Label(ventana_izquierda,text="dB")
-        label_dB.grid(row=3,column=2)
-        label_dB=Label(ventana_izquierda,text="dB")
-        label_dB.grid(row=4,column=2)
+        self.entry_wp1=Entry(self.ventana_izquierda)
+        self.entry_wa1=Entry(self.ventana_izquierda)
+        self.entry_Ap1=Entry(self.ventana_izquierda)
+        self.entry_Aa1=Entry(self.ventana_izquierda)
 
 
-        entry_wp0.grid(row=1,column=1)
-        entry_wa0.grid(row=2,column=1)
-        entry_Ap0.grid(row=3,column=1)
-        entry_Aa0.grid(row=4,column=1)
+        self.labels_and_entrys_BPBS()
 
-        entry_wp1.grid(row=5,column=1)
-        entry_wa1.grid(row=6,column=1)
-        entry_Ap1.grid(row=7,column=1)
-        entry_Aa1.grid(row=8,column=1)
 
-#unidades
-        label_Hz=Label(ventana_izquierda,text="rad/s")
-        label_Hz.grid(row=5,column=2)
-        label_Hz=Label(ventana_izquierda,text="rad/s")
-        label_Hz.grid(row=6,column=2)
-        label_dB=Label(ventana_izquierda,text="dB")
-        label_dB.grid(row=7,column=2)
-        label_dB=Label(ventana_izquierda,text="dB")
-        label_dB.grid(row=8,column=2)
 
 
 #Denormalizacion
-        label_frec_denor=Label(ventana_izquierda,text="Denormalize Frecuency:")
+        label_frec_denor=Label(self.ventana_izquierda,text="Denormalize Frecuency:")
         label_frec_denor.grid(row=9,column=0)
 
-        values_frec=["Wa","Wp","Wohter"]
-        Denormalize=ttk.Combobox(ventana_izquierda,values=values_frec, width=30)
-        Denormalize.set("Select")
-        Denormalize.grid(row=9,column=1,padx=10,pady=10)
+        values_frec=["Wa","Wp","Wother"]
+        self.Denormalize_frec=ttk.Combobox(self.ventana_izquierda,values=values_frec, width=30,state="readonly")
+        self.Denormalize_frec.set("Select")
+        self.Denormalize_frec.grid(row=9,column=1,padx=10,pady=10)
 
-        entry_Denorm_percentage=Entry(ventana_izquierda)
-        entry_Denorm_percentage.grid(row=9,column=3)
+        self.Denormalize_frec.bind("<<ComboboxSelected>>", self.selection_of_DenormFrec_changed)
 
-        label_percentage=Label(ventana_izquierda,text="%")
-        label_percentage.grid(row=9,column=4)
+        self.entry_Denorm_percentage=Entry(self.ventana_izquierda)
+
+        self.label_percentage=Label(self.ventana_izquierda,text="%")
+
 
 #Orden del filtro
-        label_orden=Label(ventana_izquierda,text="Filter Order:")
+        label_orden=Label(self.ventana_izquierda,text="Filter Order:")
         label_orden.grid(row=10,column=0)
 
-        label_fixed=Label(ventana_izquierda,text="Check if fixed:")
+        label_fixed=Label(self.ventana_izquierda,text="Check if fixed:")
         label_fixed.grid(row=10,column=1, sticky="w")
 
-        check_button_orden=Checkbutton(ventana_izquierda)
-        check_button_orden.grid(row=10,column=1)
+        self.var_Orden=IntVar()
+        self.check_button_orden=Checkbutton(self.ventana_izquierda, variable=self.var_Orden, command=self.CheckBotton_Orden_HIGH)
+        self.check_button_orden.grid(row=10,column=1)
 
-        entry_orden=Entry(ventana_izquierda)
-        entry_orden.grid(row=10,column=3)
+        self.entry_orden=Entry(self.ventana_izquierda)
+
+
+
+
 
 #Q del filtro
-        label_Q=Label(ventana_izquierda,text="Q of the Filter:")
+        label_Q=Label(self.ventana_izquierda,text="Q of the Filter:")
         label_Q.grid(row=11,column=0)
 
-        label_fixed=Label(ventana_izquierda,text="Check if fixed:")
+        label_fixed=Label(self.ventana_izquierda,text="Check if fixed:")
         label_fixed.grid(row=11,column=1, sticky="w")
 
-        check_button_orden=Checkbutton(ventana_izquierda)
-        check_button_orden.grid(row=11,column=1)
+        self.var_Q=IntVar()
+        self.check_button_Q=Checkbutton(self.ventana_izquierda, variable=self.var_Q, command=self.CheckBotton_Q_HIGH)
+        self.check_button_Q.grid(row=11,column=1)
 
-        entry_Q=Entry(ventana_izquierda)
-        entry_Q.grid(row=11,column=3)
+        self.entry_Q=Entry(self.ventana_izquierda)
+
 
 
 #boton graficar
-        button_select=Button(ventana_izquierda, text="   Graph   ")
+        button_select=Button(self.ventana_izquierda, text="   Graph   ")#, command=self.Se_Apreto_Graph())
         button_select.grid(row=12,columnspan=50)
 
 #-----------------------------------------------------------
@@ -276,25 +398,25 @@ class graphs:
 #---VENTANA DERECHA
 #------------------------------------------------------------------------
     
-        ventana_derecha=Frame(self.root)
+        self.ventana_derecha=Frame(self.root)
 
-        ventana_derecha.grid(row=0,column=1)
+        self.ventana_derecha.grid(row=0,column=1)
 
-        buttonMag = Button(ventana_derecha,text="Bode Magnitude")
+        buttonMag = Button(self.ventana_derecha,text="Bode Magnitude")
         buttonMag.grid(row=0, column=0,padx=10,pady=10)
-        buttonPhase = Button(ventana_derecha,text="Bode Phase")
+        buttonPhase = Button(self.ventana_derecha,text="Bode Phase")
         buttonPhase.grid(row=0, column=1,padx=10,pady=10)
-        buttonStep = Button(ventana_derecha,text="Step")
+        buttonStep = Button(self.ventana_derecha,text="Step")
         buttonStep.grid(row=0, column=2,padx=10,pady=10)
-        buttonImp = Button(ventana_derecha,text="Impulse")
+        buttonImp = Button(self.ventana_derecha,text="Impulse")
         buttonImp.grid(row=0, column=3,padx=10,pady=10)
-        buttonPZ = Button(ventana_derecha,text="Poles and Zeros")
+        buttonPZ = Button(self.ventana_derecha,text="Poles and Zeros")
         buttonPZ.grid(row=0, column=4,padx=10,pady=10)
-        buttonGD = Button(ventana_derecha,text="Group Delay")
+        buttonGD = Button(self.ventana_derecha,text="Group Delay")
         buttonGD.grid(row=0, column=5,padx=10,pady=10)
        
 
-        graph = Canvas(ventana_derecha, bg="blue")
+        graph = Canvas(self.ventana_derecha, bg="blue")
         graph.grid(row=1, columnspan=100,padx=10,pady=10)
 
         f = Figure()
