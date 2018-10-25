@@ -1,7 +1,7 @@
 import math as m
 from scipy import signal
 import control as c
-import numpy
+import numpy 
 
 class General_aprox(object):
 
@@ -35,6 +35,8 @@ class General_aprox(object):
         self.a=a #porcentaje de desnormalizacion
         self.polos=[]
         self.zeros=[]
+        self.Q=[]
+        self.qmax=0
         if (self.tipo == "BP") or (self.tipo == "BR"):
             self.b=(self.wpMas-self.wpMenos)/m.sqrt(self.wpMas*self.wpMenos)
         self.normalizacion()
@@ -111,6 +113,14 @@ class General_aprox(object):
             tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
             
         return tf
+    def calcular_q(self,polos):
+        for i in range (0,len(polos)):
+            modulo=numpy.abs(polos[i])
+            qaux=(modulo/(-2*numpy.real((polos[i]))))
+            self.Q.append(qaux)
+            self.Q.sort()
+            self.qmax=self.Q[(len(self.Q)-1)]
+        return;
 
     def get_denormalize_roots(self,Transfer_f):
         num=numpy.poly1d(Transfer_f.num)

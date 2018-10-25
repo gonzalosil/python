@@ -8,7 +8,7 @@ import sympy as symp
 
 class Transfer_Maker(object):
      #"""clase que se ocupa de generar las distintas funciones transferencias de orden 2 y 1 tanto para los zeros y los polos guardandolas en listas distintas"""
-     #pasarle los polos y ceros desnormalizados
+     #pasarle los polos y ceros desnormalizados 
     def __init__(self, polos_, zeros_ ):
 
         self.polos=polos_
@@ -104,7 +104,7 @@ class Transfer_Maker(object):
         else:
             for i in range(0,len(lista_con_raices)):
                 for j in range(0,len(lista_con_raices[i])):
-                    poli=np.poly1d([1,-1*lista_con_raices[i][j]])
+                    poli=np.poly1d([1/lista_con_raices[i][j]],-1)
                     num=num*poli
                 self.Transferencias_de_zeros.append(signal.TransferFunction(num,denom))
         
