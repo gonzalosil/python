@@ -22,9 +22,9 @@ from sympy import *
 
 class Bessel(General.General_aprox):
     
-    def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas,orden, tipo, a):
+    def __init__(self, As, Ap, wp, ws, tipo, orden=None, a=None, wpMenos=None,wpMas=None, wsMenos=None, wsMas=None):
         
-        General.General_aprox.__init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas,orden, tipo, a)
+        General.General_aprox.__init__(self, As, Ap, wp, ws, tipo, orden, a, wpMenos,wpMas, wsMenos, wsMas)
         self.nMinimo=0
         self.nMaximo=15
         self.Ws=ws*a/ws

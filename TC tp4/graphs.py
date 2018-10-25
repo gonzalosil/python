@@ -11,7 +11,7 @@ import numpy as np
 import Chevy_1 as Chevy
 from matplotlib import pyplot
 import Butterworth as Butter
-
+import bessel as Bessel
 class graphs:
 
 #----funciones de ploteo
@@ -232,22 +232,15 @@ class graphs:
             self.sys=Chevy.Chevy_1.get_transfer(self.Function)
             self.set_filter()
 
-            #w,mag,phase = signal.bode(TransferFunction, None, 10000)
-            #pyplot.semilogx(w,-mag)
-            #pyplot.show()
-
-     
-            #self.sys=TransferFunction
-            #self.w,self.mag,self.phase = signal.bode(self.H, None, 10000)
-            #pyplot.semilogx(self.w,-self.mag)
-            #pyplot.show()
-            #self.set_filter(TransferFuction)
-            #print(TransferFuction)
         #elif  ApproxSelected=="Chebycheff Inverso":
         #el
         elif ApproxSelected=="Bessel":
-            Tretardo=int(self.entry_Tretardo.get())
-            print(Tretardo)
+            if(FilterSelected=="LP"):
+                Tretardo=int(self.entry_Tretardo.get())
+                print(Tretardo)
+            self.Function=Bessel.Bessel(Aa0, Ap0, wp0, wa0,FilterSelected , Orden, Tretardo, wp0,wp1, wa0, wa1)
+            self.sys=Bessel.Bessel.getTransfer(self.Function)
+            self.set_filter()
         else:
            print("unknown")
 
