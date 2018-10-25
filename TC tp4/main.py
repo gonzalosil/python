@@ -17,18 +17,33 @@ from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
 import Transfer_Maker 
 
-test=Butterworth.Butterworth(20,0.5,1000,2000,"LP")
+test=Butterworth.Butterworth(20,0.5,2000,1000,"HP")
 x=sympy.Symbol('x')
 test.get_denormalize_roots((test.Transferencia_desnorm))
 wachin=Transfer_Maker.Transfer_Maker(test.polos_desnormalizados,test.zeros_desnormalizados)
-supertransfer=sp.signal.TransferFunction([1],[1])
+#print(wachin.Media_TransferDePolos)
+#print(wachin.Transferencias_de_polos[len(wachin.Transferencias_de_polos)-1])
+#w, mag, phase = sp.signal.bode(wachin.Transferencias_de_polos[len(wachin.Transferencias_de_polos)-1])
+#xscale('log')
+#plot(w,-mag)
+#show()
+#print(wachin.norma_polos,"normassssss")
+print(wachin.Transferencias_de_polos,"asdasdasdsadasdasdasdads")
 for i in range(0,len(wachin.Transferencias_de_polos)):
-    print(wachin.Transferencias_de_polos[i])
+    
+    #print(wachin.Transferencias_de_polos[i],"transferencia de polo",i)
     w, mag, phase = sp.signal.bode(wachin.Transferencias_de_polos[i])
     xscale('log')
-    plot(w,mag)
-    
+    plot(w,-mag)
 show()
+#for i in range(0,len(wachin.Transferencias_de_zeros)):
+    
+#    #print(wachin.Transferencias_de_polos[i],"transferencia de polo",i)
+#    w, mag, phase = sp.signal.bode(wachin.Transferencias_de_zeros[i])
+#    xscale('log')
+#    plot(w,-mag)
+#show()
+    
 #w, mag, phase = sp.signal.bode(supertransfer)
 #xscale('log')
 #plot(w,mag)
