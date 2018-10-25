@@ -35,6 +35,9 @@ class Chevy_2(object):
         omega = []
         poles = []
         zeros = []
+        self.Q = []
+        self.qmax = 0
+        
       
         for k in range (0,n):
             alpha.append([(2*(k+1)-1)/(2*n)*m.pi])
@@ -68,11 +71,22 @@ class Chevy_2(object):
        # pyplot.semilogx(self.w,-self.mag)
         #pyplot.show()
         self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,zeros)
-        
+        zero_denorm, pole_denorm, gain_denorm = signal.tf2zpk(self.H.num,self.H.den)
+        self.calcular_q(pole_denorm)
+
 
 
     def get_transfer(self):
         return self.H
+
+    def calcular_q(self,polos):
+        for i in range (0,len(polos)):
+            modulo=np.abs(polos[i])
+            qaux=(modulo/(-2*np.real((polos[i]))))
+            self.Q.append(qaux)
+            self.Q.sort()
+            self.qmax=self.Q[(len(self.Q)-1)]
+        return;
 
 
 if __name__ == "__main__":

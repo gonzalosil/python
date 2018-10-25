@@ -133,7 +133,7 @@ class graphs:
 
     def set_filter(self):
 
-        self.w,self.mag,self.phase = signal.bode(self.sys)
+        self.w,self.mag,self.phase = signal.bode(self.sys,None,10000)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
@@ -280,7 +280,7 @@ class graphs:
                 OK=1
             elif Ap0>Aa0:
                 OK=1
-
+                
         if OK==1:
             self.label_WARNING=Label(self.ventana_izquierda,text="Los datos no cumplen plantilla, vuelva a ingresarlos! ", font='arial', fg='red')
             self.label_WARNING.grid(row=16,columnspan=20)
