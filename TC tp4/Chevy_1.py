@@ -15,7 +15,16 @@ class Chevy_1(object):
     def __init__(self, Ap, As, Wp, Ws, type, Wp_mas=None, Ws_mas=None):
         #si se quiere hacer un band pass o un band reject, Wp y Ws se usan como Wp- y Ws-
         e=m.sqrt(m.pow(10,Ap/10)-1)
-        n=m.ceil(m.acosh((m.sqrt(m.pow(10,As/10)-1))/e)/(m.acosh(Ws/Wp)))
+        if (type == "LP"):
+            WsN = Ws/Wp
+        elif (type == "HP"):
+            WsN = Wp/Ws
+        elif (type == "BP"):
+            WsN = (Ws_mas-Ws)/(Wp_mas-Wp)
+        elif (type == "BR"):
+            WsN = (Wp_mas-Wp)/(Ws_mas-Ws)
+
+        n=m.ceil(m.acosh((m.sqrt(m.pow(10,As/10)-1))/e)/(m.acosh(WsN)))
 
         #hallo los polos de chevy
         print("hola mijo")
@@ -63,7 +72,7 @@ class Chevy_1(object):
 
         
 if __name__ == "__main__":
-    ex1= Chevy_1(10,100,1000,900, "BP",2000,2500)
+    ex1= Chevy_1(10,100,1000,500, "BP",2500, 5000)
     ex = Chevy_1.get_transfer(ex1)
     w,mag,phase = signal.bode(ex, None, 10000)
     pyplot.semilogx(w,-mag)
