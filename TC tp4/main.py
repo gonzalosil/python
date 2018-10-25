@@ -17,9 +17,24 @@ from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
 import Transfer_Maker 
 
-test=Butterworth.Butterworth(20,0.5,1000,2000,0,0,0,0,2,"LP",0)
+test=Butterworth.Butterworth(20,0.5,1000,2000,"LP")
 x=sympy.Symbol('x')
 test.get_denormalize_roots((test.Transferencia_desnorm))
+wachin=Transfer_Maker.Transfer_Maker(test.polos_desnormalizados,test.zeros_desnormalizados)
+supertransfer=sp.signal.TransferFunction([1],[1])
+for i in range(0,len(wachin.Transferencias_de_polos)):
+    print(wachin.Transferencias_de_polos[i])
+    w, mag, phase = sp.signal.bode(wachin.Transferencias_de_polos[i])
+    xscale('log')
+    plot(w,mag)
+    
+show()
+#w, mag, phase = sp.signal.bode(supertransfer)
+#xscale('log')
+#plot(w,mag)
+
+
+
 #print(test.polos)
 #print(test.zeros)
 #a=(numpy.poly1d(test.Transferencia_desnorm.num))
