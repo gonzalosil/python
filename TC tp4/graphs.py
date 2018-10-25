@@ -58,15 +58,21 @@ class graphs:
 
     def plotPZ(self):
         self.axis.clear()
+        self.axis2.clear()
         for i in range(0,self.pzg[0].size): #plotea los ceros
             self.axis.plot(np.real(self.pzg[0][i]),np.imag(self.pzg[0][i]),'o')
+            self.axis2.plot(np.real(self.pzg[0][i]),np.imag(self.pzg[0][i]),'o')
         for i in range(0,self.pzg[1].size): #plotea los polos
             self.axis.plot(np.real(self.pzg[1][i]),np.imag(self.pzg[1][i]),'X')
+            self.axis2.plot(np.real(self.pzg[1][i]),np.imag(self.pzg[1][i]),'X')
         self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
+        self.axis2.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis.set_xlabel("$Real$")
         self.axis.set_ylabel("$Imaginary$")
+        self.axis2.set_xlabel("$Real$")
+        self.axis2.set_ylabel("$Imaginary$")
         self.dataPlot.draw()
-
+        self.dataPlot2.draw()
 
 #----funciones de seteo de tipo de filtro
 #------------------------------------------------------------------------
@@ -389,58 +395,92 @@ class graphs:
         self.label_microsec.grid_forget()
         
 
-    def Se_Apreto_PrimeraEtapa(self):
-        print("Primera Etapa")
-        self.ventana_izquierda.grid(row=1,column=1)
-        self.ventana_derecha.grid(row=1,column=0)
-
-        nav = NavigationToolbar2Tk(self.dataPlot, self.ventana_inferior.pack(side=RIGHT))
-        nav.update()
 
 
-    def Se_Apreto_SegundaEtapa(self):
-        print("Segunda Etapa")
-        self.ventana_izquierda.grid_forget()
-        self.ventana_derecha.grid_forget()
+
+
+    def Selected_Etapa(self, event):
+
+        Etapa_Selected=self.Etapa.get()
+        if Etapa_Selected=="Etapa 1":
+            self.ventana_segunda_etapa.grid_forget()
+            self.ventana_primera_etapa.grid()
+        elif Etapa_Selected=="Etapa 2":
+            self.ventana_primera_etapa.grid_forget()
+            self.ventana_segunda_etapa.grid()
+            self.plotPZ()
+
+        
+
 
 #------------------
 #-----frames
-#---------------------------------------------------------------------------------------------------------
+#------------------
     def __init__(self):
         self.root = Tk()
         self.root.title("TP 4 - Grupo 6 - Teoria de Circuitos - 2018")
 
-           
-        self.ventana_superior=Frame(self.root)
+
+        self.ventana=Frame(self.root)
+        self.ventana.grid()
+
+
+        values_Etapa=["Etapa 1","Etapa 2"]
+        self.Etapa=ttk.Combobox(self.ventana,values=values_Etapa, width=30,state="readonly")
+        self.Etapa.set("Etapa 1")
+        self.Etapa.grid(row=0,column=0)
+
+        self.Etapa.bind("<<ComboboxSelected>>", self.Selected_Etapa)
+
+
+
+        self.ventana_primera_etapa=Frame(self.ventana)
+        self.ventana_primera_etapa.grid()
+
+        self.ventana_segunda_etapa=Frame(self.ventana)
+        
+        #---------
+        #-- Frames de la vetnana de la primera etapa
+        #----------
+        self.ventana_superior=Frame(self.ventana_primera_etapa)
         self.ventana_superior.pack(side=TOP)
 
-        self.ventana_inferior=Frame(self.root)
+        self.ventana_inferior=Frame(self.ventana_primera_etapa)
         self.ventana_inferior.pack(side=BOTTOM)
 
         self.ventana_izquierda=Frame(self.ventana_superior)
         self.ventana_derecha=Frame(self.ventana_superior)
+        self.ventana_izquierda.grid(row=1,column=1)
+        self.ventana_derecha.grid(row=1,column=0)
 
-        buttonPrimeraEtapa = Button(self.ventana_superior,text="Primera Etapa",command=self.Se_Apreto_PrimeraEtapa)
-        buttonPrimeraEtapa.grid(row=0, column=0,padx=40,pady=10)
-        buttonSegundaEtapa = Button(self.ventana_superior,text="Segunda Etapa",command=self.Se_Apreto_SegundaEtapa)
-        buttonSegundaEtapa.grid(row=0, column=1,padx=10,pady=10)
+                #---------
+        #-- Frames de la vetnana de la segunda etapa
+        #----------
+        self.ventana_superior2=Frame(self.ventana_segunda_etapa)
+        self.ventana_superior2.pack(side=TOP)
+
+        self.ventana_inferior2=Frame(self.ventana_segunda_etapa)
+        self.ventana_inferior2.pack(side=BOTTOM)
+
+        self.ventana_izquierda2=Frame(self.ventana_superior2)
+        self.ventana_derecha2=Frame(self.ventana_superior2)
+        self.ventana_izquierda2.grid(row=1,column=1)
+        self.ventana_derecha2.grid(row=1,column=0)
+
+        
 
 
 
-
-#---VENTANA IZQUIERDA
+#---VENTANA IZQUIERDA ETAPA 1
 #------------------------------------------------------------------------
-    
-
-
-       
+   
 
 #Seleccionador de aproximacion
         
         values_approx=["Butterworth","Chebycheff","Chebycheff Inverso","Bessel"]
         self.Type_of_approx=ttk.Combobox(self.ventana_izquierda,values=values_approx, width=30,state="readonly")
         self.Type_of_approx.set("Select Appoximation")
-        self.Type_of_approx.grid(row=0,column=0,padx=40,pady=10)
+        self.Type_of_approx.grid(row=0,column=0,padx=10,pady=10)
    
 #Seleccionador de tipo de filtro
 
@@ -550,7 +590,7 @@ class graphs:
 #-----------------------------------------------------------
 
         
-#---VENTANA DERECHA
+#---VENTANA DERECHA ETAPA 1
 #------------------------------------------------------------------------
     
 
@@ -573,7 +613,7 @@ class graphs:
 
 
 
-        graph = Canvas(self.ventana_derecha, bg="blue")
+        graph = Canvas(self.ventana_derecha)
         graph.grid(row=1, columnspan=1000,padx=10,pady=10)
 
         f = Figure()
@@ -582,9 +622,31 @@ class graphs:
         self.dataPlot = FigureCanvasTkAgg(f, master=graph)
         self.dataPlot.draw()
         self.dataPlot.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+        self.nav = NavigationToolbar2Tk(self.dataPlot, self.ventana_inferior)
+        self.nav.update()
         self.dataPlot._tkcanvas.pack(side=TOP, expand=True)
        
-      
+
+
+#-----------------------------------------------------------------------------------------
+#-----VENTANA IZQUIERDA ETAPA 2
+#-----------------------------------------------------------------------------------------
+
+        graph_polos = Canvas(self.ventana_izquierda2)
+        graph_polos.grid(row=0, column=0,padx=10,pady=10)
+
+        fig = Figure()
+        self.axis2 = fig.add_subplot(111)
+
+        self.dataPlot2 = FigureCanvasTkAgg(fig, master=graph_polos)
+        self.dataPlot2.draw()
+        self.dataPlot2.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+        self.nav2 = NavigationToolbar2Tk(self.dataPlot2, self.ventana_inferior2)
+        self.nav2.update()
+        self.dataPlot2._tkcanvas.pack(side=TOP, expand=True)
+        
+        
+
         self.root.mainloop()
 
 if __name__ == "__main__":
