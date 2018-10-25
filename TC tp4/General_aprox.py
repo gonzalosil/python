@@ -132,7 +132,10 @@ class General_aprox(object):
         #print(self.polos_desnormalizados,"polos desnormalizados")
 
         return;
-        
+
+    def get_q(self):
+        print(self.Q)
+        return self.Q    
 
 
 

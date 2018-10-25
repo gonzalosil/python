@@ -5,6 +5,7 @@ from scipy import signal
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.figure import Figure
+import matplotlib.patches as patches
 from tkinter import *
 from tkinter import ttk
 import numpy as np
@@ -30,6 +31,39 @@ class graphs:
         self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis.set_xlabel("$f (Hz)$")
         self.axis.set_ylabel("$Attenuation (dB)$")
+
+        wp0=float(self.entry_wp0.get())#menos
+        wa0=float(self.entry_wa0.get())
+        Ap=float(self.entry_Ap0.get())
+        Aa=float(self.entry_Aa0.get())
+        
+
+
+        if self.Type_of_filter.get()=="LP":
+            self.axis.add_patch(patches.Rectangle((0,Ap),wp0/(2*math.pi),50))
+            self.axis.set_ylim(0)
+            self.axis.add_patch(patches.Rectangle((wa0/(2*math.pi),0),2*wa0/(2*math.pi),Aa))
+        elif self.Type_of_filter.get()=="HP":
+            self.axis.add_patch(patches.Rectangle((wp0/(2*math.pi),Ap),2*wp0/(2*math.pi),1000)) #rectangulo de la banda pasante
+            self.axis.add_patch(patches.Rectangle((wa0/(8*math.pi),0),wa0/(2*math.pi),Aa))
+            self.axis.set_ylim(0)
+            self.axis.set_xlim(wa0/(8*math.pi),2*wp0/(2*math.pi))
+        elif self.Type_of_filter.get()=="BP":
+            wp1=float(self.entry_wp1.get())#mas
+            wa1=float(self.entry_wa1.get())
+            wc_a=math.sqrt(wa0*wa1)
+            wc_p=math.sqrt(wp0*wp1)
+            self.axis.add_patch(patches.Rectangle((0,0),wa0/(2*math.pi),Aa)) #rectangulo de la primera banda atenuada
+            self.axis.add_patch(patches.Rectangle((wc_p/(2*math.pi),Ap),wp1/(8*math.pi),1000)) #rectangulo de la banda pasante
+            self.axis.add_patch(patches.Rectangle((wa1/(2*math.pi),0),10*wa1/(2*math.pi),Aa)) #rectangulo del ultima banda atenuada
+        elif self.Type_of_filter.get()=="BR":
+            wp1=float(self.entry_wp1.get())#mas
+            wa1=float(self.entry_wa1.get())
+            wc_a=math.sqrt(wa0*wa1)
+            wc_p=math.sqrt(wp0*wp1)
+            self.axis.add_patch(patches.Rectangle((0,Ap),wp0/(2*math.pi),1000)) #rectangulo de la primera banda pasante
+            self.axis.add_patch(patches.Rectangle((wa0/(2*math.pi),0),wa1/(2*math.pi),Aa)) #rectangulo de la banda atenuada
+            self.axis.add_patch(patches.Rectangle((wp1/(2*math.pi),Ap),10*wp1/(2*math.pi),1000)) #rectangulo del ultima banda pasante
         self.dataPlot.draw()
 
     def plotStep(self):
@@ -74,14 +108,28 @@ class graphs:
         self.dataPlot.draw()
         self.dataPlot2.draw()
 
+    def plotQ(self):
+        self.axis.clear()
+
+        print("Q")
+        n=len(self.array_Q)
+        self.axis.set_xlim(0,10)
+        for i in range(0,n): #plotea los ceros
+            self.axis.plot(n+5/(n+1)*i,self.array_Q[i],'o')
+
+        self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
+
+        #self.axis.set_xlabel("$Real$")
+        self.axis.set_ylabel("$Q$")
+
+        self.dataPlot.draw()
+
+
 #----funciones de seteo de tipo de filtro
 #------------------------------------------------------------------------
 
     def set_filter(self):
-        #self.num=[1]
-        #self.den=[1,1]
-        #self.sys = signal.TransferFunction([1],[1,1])
-        #self.sys = TransferFuntion
+
         self.w,self.mag,self.phase = signal.bode(self.sys)
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
@@ -148,6 +196,8 @@ class graphs:
         print(ApproxSelected) #dato
         print(FilterSelected) #dato
 
+        
+
         #frecuencia de denormalizacion
         Selected_Denorm_Frec=self.Denormalize_frec.get()
         if Selected_Denorm_Frec=="Wother":
@@ -166,38 +216,38 @@ class graphs:
 
         #frecuencias y atenuaciones 0
         if len(self.entry_wp0.get()) != 0:
-            wp0=int(self.entry_wp0.get())
+            wp0=float(self.entry_wp0.get())
         else:
             wp0=None
         print(wp0) #dato
 
         if len(self.entry_wa0.get()) != 0:
-            wa0=int(self.entry_wa0.get())
+            wa0=float(self.entry_wa0.get())
         else:
             wa0=None
         print(wa0) #dato
 
         if len(self.entry_Ap0.get()) != 0:
-            Ap0=int(self.entry_Ap0.get())
+            Ap0=float(self.entry_Ap0.get())
         else:
             Ap0=None
         print(Ap0) #dato
 
         if len(self.entry_Aa0.get()) != 0:
-            Aa0=int(self.entry_Aa0.get())
+            Aa0=float(self.entry_Aa0.get())
         else:
             Aa0=None
         print(Aa0) #dato
 
         #frecuencias y atenuaciones 1
         if len(self.entry_wp1.get()) != 0:
-            wp1=int(self.entry_wp1.get())
+            wp1=float(self.entry_wp1.get())
         else:
             wp1=None
         print(wp1) #dato
 
         if len(self.entry_wa1.get()) != 0:
-            wa1=int(self.entry_wa1.get())
+            wa1=float(self.entry_wa1.get())
         else:
             wa1=None
         print(wa1) #dato
@@ -226,6 +276,8 @@ class graphs:
             self.Function=Butter.Butterworth(Aa0, Ap0, wp0, wa0, FilterSelected , Orden, Denormalize_percentage, wp0,wp1, wa0, wa1)
             self.sys=Butter.Butterworth.get_transfer(self.Function)
             self.set_filter()
+            self.array_Q=(self.Function.get_q())[:]
+            #print(self.Function.get_q())
         elif  ApproxSelected=="Chebycheff":
 
             self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
@@ -249,6 +301,7 @@ class graphs:
         FilterSelected=self.Type_of_filter.get()
 
         if FilterSelected=="LP":
+            
            #print(FilterSelected)
            self.labels_and_entrys_LPHP()
            #self.set_low_pass()
@@ -300,6 +353,9 @@ class graphs:
             self.entry_Q.grid(row=11,column=3)
         else:
             self.entry_Q.grid_forget()
+
+
+
 
 #---entrys para low pass y high pass
 #-----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -413,7 +469,7 @@ class graphs:
         self.root = Tk()
         self.root.title("TP 4 - Grupo 6 - Teoria de Circuitos - 2018")
 
-
+        self.array_Q=[]
         self.ventana=Frame(self.root)
         self.ventana.grid()
 
@@ -602,12 +658,16 @@ class graphs:
         buttonPZ.grid(row=0, column=4,padx=10,pady=10)
         buttonGD = Button(self.ventana_derecha,text="Group Delay",command=self.plotGroupDelay)
         buttonGD.grid(row=0, column=5,padx=10,pady=10)
-       
+        buttonQ = Button(self.ventana_derecha,text="Q",command=self.plotQ)
+        buttonQ.grid(row=0, column=6,padx=10,pady=10)
 
 
 
         graph = Canvas(self.ventana_derecha)
         graph.grid(row=1, columnspan=1000,padx=10,pady=10)
+
+        
+
 
         f = Figure()
         self.axis = f.add_subplot(111)
