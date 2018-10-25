@@ -50,7 +50,7 @@ class Chevy_1(object):
         
         self.num, self.den = signal.zpk2tf(zeros,poles,1)
        #print(self.den)
-        k = self.den[len(self.den)-1]/self.num[len(self.num)-1]
+        k = self.den[len(self.den)-1]/self.num[len(self .num)-1]
         self.sys = signal.TransferFunction(k*self.num,self.den)
         self.w,self.mag,self.phase = signal.bode(self.sys, None, 10000)
         #pyplot.semilogx(self.w,-self.mag)
@@ -63,7 +63,7 @@ class Chevy_1(object):
 
         
 if __name__ == "__main__":
-    ex1= Chevy_1(10,100,1000,5000, "LP")
+    ex1= Chevy_1(10,100,1000,900, "BP",2000,2500)
     ex = Chevy_1.get_transfer(ex1)
     w,mag,phase = signal.bode(ex, None, 10000)
     pyplot.semilogx(w,-mag)
