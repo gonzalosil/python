@@ -110,8 +110,6 @@ class Butterworth(General.General_aprox):
                 if(np.abs(np.imag(raices[i])) < 1e-6):
                     aux.append(raices[i]) #para polos con parte iimagianaria igual a 0
                 else:
-                    #test=(cmath.polar((np.conjugate(self.polos[i]))))
-                    #control=self.polos[i]
                     for j in range (i+1,len(raices)):
                         compR1=np.abs(np.real(raices[i]))
                         compR2=np.abs(np.real(raices[j]))
@@ -122,9 +120,7 @@ class Butterworth(General.General_aprox):
                             if(cuentas.comparar(compIm1,compIm2)):
                                 aux.append(raices[i])
 
-                     #   b=(cmath.polar(self.polos[j]))
-                        #if ((np.abs(self.polos[i]) ) == (np.abs(self.polos[j]))):
-                        #    if( (cmath.phase(self.polos[i])) == (-1*cmath.phase(self.polos[j])) ):
+                    
 
             return aux;
 
