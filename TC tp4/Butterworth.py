@@ -50,7 +50,7 @@ class Butterworth(General.General_aprox):
         return;
 
     def polosButter(self):
-        r0=1
+        r0=1/((self.epsilon)**(1/self.n))
         raiz=1
         for k in range(1,self.n+1):
             raiz=r0*(-np.sin(np.pi*(2*k-1)/(2*self.n))+1j*np.cos(np.pi*(2*k-1)/(2*self.n)))
@@ -68,9 +68,12 @@ class Butterworth(General.General_aprox):
         
         self.denom=np.poly1d([1])
         if(self.tipo == "LP"):
-            wc = self.wp /(self.epsilon**(1/self.n))
+            wc = self.wp #/(self.epsilon**(1/self.n))
         elif(self.tipo == "HP"):
-            wc = self.wp * (self.epsilon**(1/self.n))
+            wc = self.wp
+           #* (self.epsilon**(1/self.n))
+        else:
+            wc=self.wp
        
         self.Transferencia_desnorm=self.denormalization(self.tipo,wc,self.n,self.polos)
         

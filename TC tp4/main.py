@@ -17,7 +17,7 @@ from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
 import Transfer_Maker 
 
-test=Butterworth.Butterworth(20,0.5,2000,1000,0,0,0,0,2,"HP",0)
+test=Butterworth.Butterworth(20,0.5,1000,2000,0,0,0,0,2,"LP",0)
 x=sympy.Symbol('x')
 #print(test.polos)
 #print(test.zeros)
@@ -36,12 +36,16 @@ print(numpy.roots(b),"raices denom")
 
 
 ######################## PRUEBAS TRANSFER MAKER ################################
+## con el de aca es como tengo que hacer para que me quede los ceros y polos
 a=(test.separar_a_ordenes_menores(numpy.roots(b)))
 print(a,"ashhhhhhh")
 #print(a,"el de butter")
 #print(prueba.polos_separados,"el de transfer maker")
 
 a=(test.armar_transferencias(a))
+
+
+
 print(a,"el de butter")
 #print(prueba.Media_TransferDePolos, "el de tfm")
 ######################## PRUEBAS TRANSFER MAKER ################################
