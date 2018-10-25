@@ -19,14 +19,15 @@ import Transfer_Maker
 
 test=Butterworth.Butterworth(20,0.5,1000,2000,0,0,0,0,2,"LP",0)
 x=sympy.Symbol('x')
+test.get_denormalize_roots((test.Transferencia_desnorm))
 #print(test.polos)
 #print(test.zeros)
-a=(numpy.poly1d(test.Transferencia_desnorm.num))
-print(a)
-b=(numpy.poly1d(test.Transferencia_desnorm.den))
-print(b)
-print(test.polos,"raciessss")
-print(numpy.roots(b),"raices denom")
+#a=(numpy.poly1d(test.Transferencia_desnorm.num))
+#print(a)
+#b=(numpy.poly1d(test.Transferencia_desnorm.den))
+#print(b)
+#print(test.polos,"raciessss")
+#print(numpy.roots(b),"raices denom")
 #print(sympy.Poly(a,x).all_coeffs(),"asfasdasdsaf")
 #print(sympy.Poly(b,x).all_coeffs(),"asfasdasdsafasdfffff")
 
@@ -37,16 +38,16 @@ print(numpy.roots(b),"raices denom")
 
 ######################## PRUEBAS TRANSFER MAKER ################################
 ## con el de aca es como tengo que hacer para que me quede los ceros y polos
-a=(test.separar_a_ordenes_menores(numpy.roots(b)))
-print(a,"ashhhhhhh")
+#a=(test.separar_a_ordenes_menores(numpy.roots(b)))
+#print(a,"separar ordenes")
 #print(a,"el de butter")
 #print(prueba.polos_separados,"el de transfer maker")
 
-a=(test.armar_transferencias(a))
+#a=(test.armar_transferencias(a))
 
 
 
-print(a,"el de butter")
+#print(a," transferencias de butter")
 #print(prueba.Media_TransferDePolos, "el de tfm")
 ######################## PRUEBAS TRANSFER MAKER ################################
 
@@ -57,10 +58,10 @@ print(a,"el de butter")
 
 #print(test.armar_transferencias(a))
 
-w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
-xscale('log')
-plot(w,mag)
-show()
+#w, mag, phase = sp.signal.bode(test.Transferencia_desnorm)
+#xscale('log')
+#plot(w,mag)
+#show()
 
 #wachin=test.conseguir_polos_por_separado()
 #print(wachin)
