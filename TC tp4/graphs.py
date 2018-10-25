@@ -10,6 +10,7 @@ from tkinter import ttk
 import numpy as np
 import Chevy_1 as Chevy
 from matplotlib import pyplot
+import Butterworth as Butter
 
 class graphs:
 
@@ -215,10 +216,12 @@ class graphs:
             Q=None
         print(Q) #dato
 
-        #if ApproxSelected=="Butterworth":
-        #elif
-        if  ApproxSelected=="Chebycheff":
-            #print("Hola j")
+        if ApproxSelected=="Butterworth":
+            self.Function=Butter.Butterworth(Aa0, Ap0, wp0, wa0, FilterSelected , Orden, Denormalize_percentage, wp0,wp1, wa0, wa1)
+            self.sys=Butter.Butterworth.get_transfer(self.Function)
+            self.set_filter()
+        elif  ApproxSelected=="Chebycheff":
+
             self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
             self.sys=Chevy.Chevy_1.get_transfer(self.Function)
             self.set_filter()
@@ -388,12 +391,18 @@ class graphs:
 
     def Se_Apreto_PrimeraEtapa(self):
         print("Primera Etapa")
-        self.ventana_izquierda.grid(row=1,column=0)
-        self.ventana_derecha.grid(row=1,column=1)
+        self.ventana_izquierda.grid(row=1,column=1)
+        self.ventana_derecha.grid(row=1,column=0)
+
+        nav = NavigationToolbar2Tk(self.dataPlot, self.ventana_inferior.pack(side=RIGHT))
+        nav.update()
+
+
     def Se_Apreto_SegundaEtapa(self):
         print("Segunda Etapa")
         self.ventana_izquierda.grid_forget()
         self.ventana_derecha.grid_forget()
+
 #------------------
 #-----frames
 #---------------------------------------------------------------------------------------------------------
@@ -401,19 +410,28 @@ class graphs:
         self.root = Tk()
         self.root.title("TP 4 - Grupo 6 - Teoria de Circuitos - 2018")
 
-            
+           
         self.ventana_superior=Frame(self.root)
-        self.ventana_superior.grid(row=0,columnspan=20)
+        self.ventana_superior.pack(side=TOP)
+
+        self.ventana_inferior=Frame(self.root)
+        self.ventana_inferior.pack(side=BOTTOM)
+
+        self.ventana_izquierda=Frame(self.ventana_superior)
+        self.ventana_derecha=Frame(self.ventana_superior)
 
         buttonPrimeraEtapa = Button(self.ventana_superior,text="Primera Etapa",command=self.Se_Apreto_PrimeraEtapa)
         buttonPrimeraEtapa.grid(row=0, column=0,padx=40,pady=10)
         buttonSegundaEtapa = Button(self.ventana_superior,text="Segunda Etapa",command=self.Se_Apreto_SegundaEtapa)
         buttonSegundaEtapa.grid(row=0, column=1,padx=10,pady=10)
 
+
+
+
 #---VENTANA IZQUIERDA
 #------------------------------------------------------------------------
     
-        self.ventana_izquierda=Frame(self.root)
+
 
        
 
@@ -535,7 +553,7 @@ class graphs:
 #---VENTANA DERECHA
 #------------------------------------------------------------------------
     
-        self.ventana_derecha=Frame(self.root)
+
         
 
 
@@ -563,11 +581,8 @@ class graphs:
 
         self.dataPlot = FigureCanvasTkAgg(f, master=graph)
         self.dataPlot.draw()
-        #self.dataPlot.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
-        #nav = NavigationToolbar2Tk(self.dataPlot, self.ventana_derecha)
-        #nav.update()
+        self.dataPlot.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
         self.dataPlot._tkcanvas.pack(side=TOP, expand=True)
-
        
       
         self.root.mainloop()

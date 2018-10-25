@@ -1,6 +1,7 @@
 import math as m
 from scipy import signal
 import control as c
+import numpy
 
 class General_aprox(object):
 
@@ -17,7 +18,7 @@ class General_aprox(object):
             wsn=1
         return;
 
-    def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas,orden, tipo, a):
+    def __init__(self, As, Ap, wp, ws, tipo, orden=None, a=None, wpMenos=None,wpMas=None, wsMenos=None, wsMas=None):
         super().__init__()
         self.As=As
         self.Ap=Ap
@@ -37,6 +38,9 @@ class General_aprox(object):
         if (self.tipo == "BP") or (self.tipo == "BR"):
             self.b=(self.wpMas-self.wpMenos)/m.sqrt(self.wpMas*self.wpMenos)
         self.normalizacion()
+        self.zeros_desnormalizados=[]  ##estos se mandan en el constructor de transfer_maker la etapa dos
+        self.polos_desnormalizados=[]  ##estos se mandan en el constructor de transfer_maker en la etapa 2
+        
         return;
 
     def denormalization (self, type, W, n, poles=None, zeros=None, Wpmas=None, Wamenos=None, Wamas=None): #type se refiere al tipo de filtro que se desea
@@ -107,6 +111,20 @@ class General_aprox(object):
             tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
             
         return tf
+
+    def get_denormalize_roots(self,Transfer_f):
+        num=numpy.poly1d(Transfer_f.num)
+        den=numpy.poly1d(Transfer_f.den)
+
+        self.zeros_desnormalizados=numpy.roots(num)
+        self.polos_desnormalizados=numpy.roots(den)
+        #print(self.zeros_desnormalizados,"zeros desnormalizados")
+        #print(self.polos_desnormalizados,"polos desnormalizados")
+
+        return;
+        
+
+
 
     
 
