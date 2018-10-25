@@ -64,7 +64,7 @@ class Chevy_1(object):
         self.w,self.mag,self.phase = signal.bode(self.sys, None, 10000)
         #pyplot.semilogx(self.w,-self.mag)
         #pyplot.show()
-        self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,2000,800,8000)
+        self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,Wp_mas,Ws,Ws_mas)
         if n%2 == 0:
             self.H.num = self.H.num*pow(10,-Ap/20)
         
@@ -74,7 +74,7 @@ class Chevy_1(object):
 
         
 if __name__ == "__main__":
-    ex1= Chevy_1(10,100,1000,10000, "LP")
+    ex1= Chevy_1(10,100,2000,1000, "BP", 3000, 4000)
     ex = Chevy_1.get_transfer(ex1)
     w,mag,phase = signal.bode(ex, None, 10000)
     pyplot.semilogx(w,-mag)

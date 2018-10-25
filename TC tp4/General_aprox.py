@@ -89,9 +89,7 @@ class General_aprox(object):
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
 
-            k =1# tf.den[0][0][len(tf.den[0][0])-1]/tf.num[0][0][0]
-
-            tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
+            tf = signal.TransferFunction(tf.num[0][0], tf.den[0][0])
 
         elif type == "BR":
             Wo=m.sqrt(Wpmas*W)
