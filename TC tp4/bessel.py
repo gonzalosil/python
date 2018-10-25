@@ -30,6 +30,8 @@ class Bessel(General.General_aprox):
         self.Ws=ws*a/ws
         self.Wp=wp*a/ws
         self.n=1
+        self.poles=[]
+        self.zeros=[]
         self.ganancia=1
         self.denom=np.poly1d([1])
         self.num=np.poly1d([1])
@@ -78,13 +80,15 @@ class Bessel(General.General_aprox):
         self.denom=np.poly1d(denom_array)
         self.num=np.poly1d(numerador_array)
         self.Transferencia_norm=signal.TransferFunction(self.num,self.denom)
-        #self.Transferencia_desnorm= General_aprox.denormalization(self,type,Wp,n,poles,None,2000,800,8000)
+        self.poles=self.Transferencia_norm.poles
+        self.zeros=self.Transferencia_norm.zeros
+        self.Transferencia_desnorm= General.General_aprox.denormalization(self,"LP",self.Wp,self.n,self.poles,self.zeros,2000,800,8000)
         return;
    
     
 
     def getTransfer(self):
-        return self.Transferencia_norm;
+        return self.Transferencia_desnorm;
 
 
     ##OJO CON ESTO QUE NO ESTA HECHO

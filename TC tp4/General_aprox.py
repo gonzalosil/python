@@ -53,7 +53,7 @@ class General_aprox(object):
             if zeros != None:
                 for k in range (0,len(zeros)):
                     tf = tf * (s-zeros[k])
-            if poles != None:
+            if len(poles) != None:
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
             #print(tf.den[0][0][len(tf.den[0][0])-1])
