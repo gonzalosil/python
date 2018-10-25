@@ -18,7 +18,7 @@ class General_aprox(object):
             wsn=1
         return;
 
-    def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas,orden, tipo, a):
+    def __init__(self, As, Ap, wp, ws, tipo, orden=None, a=None, wpMenos=None,wpMas=None, wsMenos=None, wsMas=None):
         super().__init__()
         self.As=As
         self.Ap=Ap

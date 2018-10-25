@@ -8,9 +8,9 @@ import numpy as np
 import sympy as symp
 
 class Butterworth(General.General_aprox):
-    def __init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas,orden, tipo, a):
-        
-        General.General_aprox.__init__(self, As, Ap, wp, ws, wpMenos, wpMas, wsMenos, wsMas,orden, tipo, a)
+    def __init__(self, As, Ap, wp, ws, tipo, orden=None, a=None, wpMenos=None,wpMas=None, wsMenos=None, wsMas=None):
+
+        General.General_aprox.__init__(self, As, Ap, wp, ws, tipo, orden, a, wpMenos,wpMas, wsMenos, wsMas)
         self.nMinimo=0
         self.nMaximo=25
         self.epsilon=1
@@ -41,11 +41,14 @@ class Butterworth(General.General_aprox):
     def nButter(self):  #me fijo que el n que se ingreso es valido sino lo cambio
         
         control=m.ceil(m.log10((m.sqrt((10**(self.As/10))-1)/self.epsilon))/m.log10(self.wsn))
-        
-        if(self.n < control):
+        if self.n != None:
+            if(self.n < control):
+                self.n=control
+            elif(self.n > self.nMaximo):
+                self.n =self.nMaximo
+        else:
             self.n=control
-        elif(self.n > self.nMaximo):
-            self.n =self.nMaximo
+
          
         return;
 
@@ -73,9 +76,9 @@ class Butterworth(General.General_aprox):
             wc = self.wp
            #* (self.epsilon**(1/self.n))
         else:
-            wc=self.wp
-       
-        self.Transferencia_desnorm=self.denormalization(self.tipo,wc,self.n,self.polos)
+            wc=self.wpMenos
+       #poles=None, zeros=None, Wpmas=None, Wamenos=None, Wamas=None)
+        self.Transferencia_desnorm=self.denormalization(self.tipo,wc,self.n,self.polos,self.zeros,self.wpMas,self.wsMenos,self.wsMas)
         
   
         return;
@@ -89,6 +92,9 @@ class Butterworth(General.General_aprox):
             self.Q.sort()
             self.qmax=self.Q[(len(self.Q)-1)]
         return;
+
+    def get_transfer(self):
+        return self.Transferencia_desnorm
 
 
     ##

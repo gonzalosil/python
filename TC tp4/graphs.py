@@ -10,6 +10,7 @@ from tkinter import ttk
 import numpy as np
 import Chevy_1 as Chevy
 from matplotlib import pyplot
+import Butterworth as Butter
 
 class graphs:
 
@@ -215,10 +216,12 @@ class graphs:
             Q=None
         print(Q) #dato
 
-        #if ApproxSelected=="Butterworth":
-        #elif
-        if  ApproxSelected=="Chebycheff":
-            #print("Hola j")
+        if ApproxSelected=="Butterworth":
+            self.Function=Butter.Butterworth(Aa0, Ap0, wp0, wa0, FilterSelected , Orden, Denormalize_percentage, wp0,wp1, wa0, wa1)
+            self.sys=Butter.Butterworth.get_transfer(self.Function)
+            self.set_filter()
+        elif  ApproxSelected=="Chebycheff":
+
             self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
             self.sys=Chevy.Chevy_1.get_transfer(self.Function)
             self.set_filter()
@@ -390,7 +393,6 @@ class graphs:
         print("Primera Etapa")
         self.ventana_izquierda.grid(row=1,column=1)
         self.ventana_derecha.grid(row=1,column=0)
-
 
         nav = NavigationToolbar2Tk(self.dataPlot, self.ventana_inferior.pack(side=RIGHT))
         nav.update()
