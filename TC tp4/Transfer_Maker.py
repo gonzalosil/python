@@ -13,8 +13,10 @@ class Transfer_Maker(object):
 
         self.polos=polos_
         self.zeros=zeros_
-        self.polos_separados=self.separar_a_ordenes_menores(self.polos)
-        self.zeros_separados=self.separar_a_ordenes_menores(self.zeros)
+        self.norma_polos=[]
+        self.norma_zeros=[]
+        self.polos_separados=self.separar_a_ordenes_menores(self.polos,self.norma_polos)
+        self.zeros_separados=self.separar_a_ordenes_menores(self.zeros,self.norma_zeros)
         #paso intermedio para obtener las transferencias METER DESPUES EN OTRA FUNCION
         self.Media_TransfersDeZeros=self.armar_transferencias(self.zeros_separados)
         self.Media_TransferDePolos=self.armar_transferencias(self.polos_separados)
@@ -30,17 +32,19 @@ class Transfer_Maker(object):
 
         return;
    
-    def separar_a_ordenes_menores(self,raices):
+    def separar_a_ordenes_menores(self,raices,norma_raices):
         ##me devuelve un arreglo con todos los raices sacandoles las conjugadas 
         aux=[]
         test=0
-        
+        #print(raices,"asdasdasdassdasdadsasd")
         if (len(raices) == 0):
             return aux;
         else:
             for i in range(0,len(raices)):
                 if(np.abs(np.imag(raices[i])) < 1e-6):
-                    aux.append(raices[i]) #para polos con parte iimagianaria igual a 0
+                    aux.append(np.real(raices[i])) #para polos con parte iimagianaria igual a 0
+                    norma_raices.append(np.abs(np.real(raices[i])))
+                    #print(np.abs(np.real(raices[i])),"que salesdsad")
                 else:
                     #test=(cmath.polar((np.conjugate(self.polos[i]))))
                     #control=self.polos[i]
@@ -53,11 +57,15 @@ class Transfer_Maker(object):
                         if(cuentas.comparar(compR1,compR2)):
                             if(cuentas.comparar(compIm1,compIm2)):
                                 aux.append(raices[i])
+                                #test=cmath.polar(raices[j])
+                                norma_raices.append(np.abs(raices[i]))
+                                #print("raices[j]",test[0] )
+                               # print(np.abs(raices[j]),"que sale")
 
                      #   b=(cmath.polar(self.polos[j]))
                         #if ((np.abs(self.polos[i]) ) == (np.abs(self.polos[j]))):
                         #    if( (cmath.phase(self.polos[i])) == (-1*cmath.phase(self.polos[j])) ):
-
+        print(aux,"tu vieja")
         return aux;
 
     def armar_transferencias(self, raices):
@@ -84,9 +92,16 @@ class Transfer_Maker(object):
         ##para los polos
 
         for i in range(0,len(lista_con_raices)):
-            for j in range(0,len(lista_con_raices[i])):
-                poli=np.poly1d([1,-1*lista_con_raices[i][j]])
-                denom=denom*poli
+            
+           # for j in range(0,len(lista_con_raices[i])):
+            denom=np.poly(lista_con_raices[i])
+            if(len(lista_con_raices[i]) == 2 ):
+                num=np.poly1d([(self.norma_polos[i]**2)])
+            elif(len(lista_con_raices[i]) == 1 ):
+                num=np.poly1d([(self.norma_polos[i])])
+
+                #poli=np.poly1d([1/lista_con_raices[i][j]],-1)
+                #denom=denom*poli
             self.Transferencias_de_polos.append(signal.TransferFunction(num,denom))
                   
         #print(self.Transferencias_de_polos)
@@ -104,7 +119,7 @@ class Transfer_Maker(object):
         else:
             for i in range(0,len(lista_con_raices)):
                 for j in range(0,len(lista_con_raices[i])):
-                    poli=np.poly1d([1/lista_con_raices[i][j]],-1)
+                    poli=np.poly1d([1,-1*lista_con_raices[i][j]])
                     num=num*poli
                 self.Transferencias_de_zeros.append(signal.TransferFunction(num,denom))
         
