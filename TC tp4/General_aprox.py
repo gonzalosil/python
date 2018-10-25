@@ -52,7 +52,7 @@ class General_aprox(object):
             tf = c.tf([1],[1])
             if zeros != None:
                 for k in range (0,len(zeros)):
-                    tf = tf * (s-zeros(k))
+                    tf = tf * (s-zeros[k])
             if poles != None:
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
@@ -66,7 +66,7 @@ class General_aprox(object):
             tf = c.tf([1],[1])
             if zeros != None:
                 for k in range (0,len(zeros)):
-                    tf = tf * (s-zeros(k))
+                    tf = tf * (s-zeros[k])
             if poles != None:
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
@@ -84,7 +84,7 @@ class General_aprox(object):
 
             if zeros != None:
                 for k in range (0,len(zeros)):
-                    tf = tf * (s-zeros(k))
+                    tf = tf * (s-zeros[k])
             if poles != None:
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
@@ -103,7 +103,7 @@ class General_aprox(object):
 
             if zeros != None:
                 for k in range (0,len(zeros)):
-                    tf = tf * (s-zeros(k))
+                    tf = tf * (s-zeros[k])
             if poles != None:
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
@@ -113,6 +113,8 @@ class General_aprox(object):
             tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
             
         return tf
+
+
     def calcular_q(self,polos):
         for i in range (0,len(polos)):
             modulo=numpy.abs(polos[i])
