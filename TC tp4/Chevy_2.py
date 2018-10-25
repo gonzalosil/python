@@ -42,7 +42,7 @@ class Chevy_2(object):
                 poles.append(WsN*(1/(complex(m.sin(alpha[k][0])*m.sinh(beta), m.cos(alpha[k][0]*m.cosh(beta))))))
 
         #print (poles)
-        for k in range (0,n):
+        for k in range (0,m.ceil(n/2)):
             zeros.append(WsN*complex(0,1/m.cos(alpha[k][0])))
         #print (zeros)
         print(n)
