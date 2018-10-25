@@ -51,6 +51,7 @@ class graphs:
             self.axis.set_ylim(0)
             self.axis.set_xlim(wa0/(8*math.pi),2*wp0/(2*math.pi))
         elif self.Type_of_filter.get()=="BP":
+
             wp1=float(self.entry_wp1.get())#mas
             wa1=float(self.entry_wa1.get())
             wc_a=math.sqrt(wa0*wa1)
@@ -221,40 +222,77 @@ class graphs:
             wp0=float(self.entry_wp0.get())
         else:
             wp0=None
-        print(wp0) #dato
 
         if len(self.entry_wa0.get()) != 0:
             wa0=float(self.entry_wa0.get())
         else:
             wa0=None
-        print(wa0) #dato
 
         if len(self.entry_Ap0.get()) != 0:
             Ap0=float(self.entry_Ap0.get())
         else:
             Ap0=None
-        print(Ap0) #dato
 
         if len(self.entry_Aa0.get()) != 0:
             Aa0=float(self.entry_Aa0.get())
         else:
             Aa0=None
-        print(Aa0) #dato
 
         #frecuencias y atenuaciones 1
         if len(self.entry_wp1.get()) != 0:
             wp1=float(self.entry_wp1.get())
         else:
             wp1=None
-        print(wp1) #dato
 
         if len(self.entry_wa1.get()) != 0:
             wa1=float(self.entry_wa1.get())
         else:
             wa1=None
+
+        #chequep que los datos sean dados correctamente\
+        OK=0
+
+        if FilterSelected=="LP":
+            if wp0>wa0:
+                OK=1
+            elif Ap0>Aa0:
+                OK=1
+        elif  FilterSelected=="HP":
+            if wa0>wp0:
+                OK=1
+            elif Ap0>Aa0:
+                OK=1
+        elif  FilterSelected=="BP":
+            if wa0>wa1:
+                OK=1
+            elif wp0>wp1:
+                OK=1
+            elif wa0>wp0:
+                OK=1
+            elif Ap0>Aa0:
+                OK=1
+        elif FilterSelected=="BR":
+            if wa0>wa1:
+                OK=1
+            elif wp0>wp1:
+                OK=1
+            elif wp0>wa0:
+                OK=1
+            elif Ap0>Aa0:
+                OK=1
+
+        if OK==1:
+            self.label_WARNING=Label(self.ventana_izquierda,text="Los datos no cumplen plantilla, vuelva a ingresarlos! ", font='arial', fg='red')
+            self.label_WARNING.grid(row=16,columnspan=20)
+        else:
+            self.label_WARNING.grid_forget()
+
+        print(wp0) #dato
+        print(wa0) #dato
+        print(wp1) #dato
         print(wa1) #dato
-
-
+        print(Ap0) #dato
+        print(Aa0) #dato
 
         #orden del filtro
 
@@ -274,23 +312,27 @@ class graphs:
             Q=None
         print(Q) #dato
 
-        if ApproxSelected=="Butterworth":
+        if ApproxSelected=="Butterworth" and OK==0:
+
             self.Function=Butter.Butterworth(Aa0, Ap0, wp0, wa0, FilterSelected , Orden, Denormalize_percentage, wp0,wp1, wa0, wa1)
             self.sys=Butter.Butterworth.get_transfer(self.Function)
             self.set_filter()
             self.array_Q=(self.Function.get_q())[:]
             #print(self.Function.get_q())
-        elif  ApproxSelected=="Chebycheff":
+        elif  ApproxSelected=="Chebycheff"and OK==0:
 
             self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
             self.sys=Chevy.Chevy_1.get_transfer(self.Function)
             self.set_filter()
 
-        elif  ApproxSelected=="Chebycheff Inverso":
+        elif  ApproxSelected=="Chebycheff Inverso"and OK==0:
+
             self.Function=chevy2.Chevy_2(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
             self.sys=chevy2.Chevy_2.get_transfer(self.Function)
             self.set_filter()
-        elif ApproxSelected=="Bessel":
+
+        elif ApproxSelected=="Bessel"and OK==0:
+
             if(FilterSelected=="LP"):
                 Tretardo=int(self.entry_Tretardo.get())
                 print(Tretardo)
@@ -357,6 +399,11 @@ class graphs:
             self.entry_Q.grid(row=11,column=3)
         else:
             self.entry_Q.grid_forget()
+
+
+
+
+        
 
 
 
@@ -637,8 +684,8 @@ class graphs:
         self.label_microsec=Label(self.ventana_izquierda,text="microsec")
 
 #boton graficar
-        button_select=Button(self.ventana_izquierda, text="       Graph       ", command=self.Se_Apreto_Graph)
-        button_select.grid(row=14,columnspan=20, padx=2, pady=2)
+        button_Graph=Button(self.ventana_izquierda, text="       Graph       ", command=self.Se_Apreto_Graph)
+        button_Graph.grid(row=15,columnspan=20, padx=2, pady=2)
 
 #-----------------------------------------------------------
 
