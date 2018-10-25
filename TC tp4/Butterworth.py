@@ -78,7 +78,7 @@ class Butterworth(General.General_aprox):
         else:
             wc=self.wpMenos
        #poles=None, zeros=None, Wpmas=None, Wamenos=None, Wamas=None)
-        self.Transferencia_desnorm=self.denormalization(self.tipo,wc,self.n,self.polos,self.zeros,self.wpMas,self.wsMenos,self.wsMas)
+        self.Transferencia_desnorm=self.denormalization(self.tipo,wc,self.n,self.polos,None,self.wpMas,self.wsMenos,self.wsMas)
         
   
         return;

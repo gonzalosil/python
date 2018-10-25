@@ -70,7 +70,7 @@ class Chevy_2(object):
        # self.w,self.mag,self.phase = signal.bode(self.sys, None, 10000)
        # pyplot.semilogx(self.w,-self.mag)
         #pyplot.show()
-        self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,zeros)
+        self.H = denorm.General_aprox.denormalization(self,type,Ws,n,poles,zeros,Ws_mas,Wp,Wp_mas)
         zero_denorm, pole_denorm, gain_denorm = signal.tf2zpk(self.H.num,self.H.den)
         self.calcular_q(pole_denorm)
 
