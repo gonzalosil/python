@@ -280,9 +280,11 @@ class graphs:
                 OK=1
             elif Ap0>Aa0:
                 OK=1
-                
+        else:
+            OK=0
+
+        self.label_WARNING=Label(self.ventana_izquierda,text="Los datos no cumplen plantilla, vuelva a ingresarlos! ", font='arial', fg='red')
         if OK==1:
-            self.label_WARNING=Label(self.ventana_izquierda,text="Los datos no cumplen plantilla, vuelva a ingresarlos! ", font='arial', fg='red')
             self.label_WARNING.grid(row=16,columnspan=20)
         else:
             self.label_WARNING.grid_forget()
@@ -318,7 +320,7 @@ class graphs:
             self.sys=Butter.Butterworth.get_transfer(self.Function)
             self.set_filter()
             self.array_Q=(self.Function.get_q())[:]
-            #print(self.Function.get_q())
+            
         elif  ApproxSelected=="Chebycheff"and OK==0:
 
             self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
