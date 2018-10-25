@@ -72,7 +72,7 @@ class Chevy_1(object):
 
         
 if __name__ == "__main__":
-    ex1= Chevy_1(10,100,1000,500, "BP",2500, 5000)
+    ex1= Chevy_1(10,100,1000,5000, "LP")
     ex = Chevy_1.get_transfer(ex1)
     w,mag,phase = signal.bode(ex, None, 10000)
     pyplot.semilogx(w,-mag)
