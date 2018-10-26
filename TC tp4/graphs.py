@@ -518,15 +518,13 @@ class graphs:
         Etapa_Selected=self.combo_Etapas.get()
         self.List_Etapas.insert(END,Etapa_Selected)
 
-    def Se_Apreto_Clean_Stages(self):
 
-        items = self.List_Etapas.curselection()
-        pos = 0
-        for i in items :
-            idx = int(i) - pos
-            self.List_Etapas.delete( idx,idx )
-            pos = pos + 1
 
+    def Se_Apreto_Graph_Etapas(self):
+        print("Se apreto Graph jeje")
+
+    def Click_Limpiar(self):
+        self.List_Etapas.delete(0,END)
 #------------------
 #-----frames
 #------------------
@@ -756,6 +754,9 @@ class graphs:
         self.Polos_Ceros=Frame(self.ventana_izquierda2)
         self.Polos_Ceros.grid(row=0, column=0,padx=10,pady=10)
 
+        self.Frame_Botones_Graficos_Sup=Frame(self.ventana_derecha2)
+        self.Frame_Botones_Graficos_Sup.grid(row=0,column=0,padx=10,pady=10)
+
         #polos y ceros 
 
         self.values_Polos=[0,1,2]
@@ -784,11 +785,18 @@ class graphs:
         self.combo_Etapas.grid(row=1,column=1,padx=10,pady=10)
         self.combo_Etapas.bind("<<ComboboxSelected>>", self.Selected_Etapa_a_Graph)
 
-        self.List_Etapas=Listbox(self.Polos_Ceros,selectmode=EXTENDED, width=50)
+        self.List_Etapas=Listbox(self.Polos_Ceros)
         self.List_Etapas.grid(row=2,columnspan=20)
+        self.List_Etapas.delete(0,END)
+        #self.Clean_List_Etapas = Button(self.Polos_Ceros,text="Clean List of Stages", command=self.Se_Apreto_Clean_Stages()) 
+        #self.Clean_List_Etapas.grid(row=3, column=0,padx=10,pady=10)
 
-        self.Clean_List_Etapas = Button(self.Polos_Ceros,text="Clean List of Stages")#, command=self.Se_Apreto_Clean_Stages())   #,command=)
-        self.Clean_List_Etapas.grid(row=3, columnspan=50)
+        self.Graph_List_Etapas = Button(self.Polos_Ceros,text="Graph List", command=self.Se_Apreto_Graph_Etapas)   #,command=)
+        self.Graph_List_Etapas.grid(row=3, column=1,padx=10,pady=10)
+
+
+        self.Limpiar_Lista = Button(self.Polos_Ceros,text="Clean List", command=self.Click_Limpiar) 
+        self.Limpiar_Lista.grid(row=3, column=0,padx=10,pady=10)
 
         #grafico de polos
         graph_polos = Canvas(self.ventana_izquierda2)
@@ -798,11 +806,35 @@ class graphs:
         self.dataPlot2 = FigureCanvasTkAgg(fig, master=graph_polos)
         self.dataPlot2.draw()
         self.dataPlot2.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
-        self.nav2 = NavigationToolbar2Tk(self.dataPlot2, self.ventana_inferior2)
-        self.nav2.update()
         self.dataPlot2._tkcanvas.pack(side=TOP, expand=True)
         
-        
+
+        #ventana derecha graficos segunda atapa
+
+        self.Boton_Acumulado = Button(self.Frame_Botones_Graficos_Sup,text="Accumulate")   #,command=)
+        self.Boton_Acumulado.grid(row=0, column=0,padx=10,pady=10)
+        self.Boton_Induvidual = Button(self.Frame_Botones_Graficos_Sup,text="Individual") #,command=)
+        self.Boton_Induvidual.grid(row=0, column=1,padx=10,pady=10)
+        self.Boton_Superpuesto = Button(self.Frame_Botones_Graficos_Sup,text="Superpuesto") #,command=)
+        self.Boton_Superpuesto.grid(row=0, column=2,padx=10,pady=10)
+
+
+        self.Boton_Polos = Button(self.Frame_Botones_Graficos_Sup,text="Polos") #,command=)
+        self.Boton_Polos.grid(row=1, column=0,padx=10,pady=10)
+
+        self.Boton_Polos = Button(self.Frame_Botones_Graficos_Sup,text="Ceros") #,command=)
+        self.Boton_Polos.grid(row=1, column=1,padx=10,pady=10)
+
+        graph_Superpuestos = Canvas(self.ventana_derecha2)
+        graph_Superpuestos.grid(row=2, column=0,padx=10,pady=10)
+        figura = Figure()
+        self.axis3 = figura.add_subplot(111)
+        self.dataPlot3 = FigureCanvasTkAgg(figura, master=graph_Superpuestos)
+        self.dataPlot3.draw()
+        self.dataPlot3.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+        self.nav3 = NavigationToolbar2Tk(self.dataPlot3, self.ventana_inferior2)
+        self.nav3.update()
+        self.dataPlot3._tkcanvas.pack(side=TOP, expand=True)
 
         self.root.mainloop()
 
