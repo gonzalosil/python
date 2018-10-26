@@ -11,9 +11,10 @@ from tkinter import ttk
 import numpy as np
 import General_aprox as denorm
 
-class Chevy_2(object):
-    def __init__(self, Ap, As, Wp, Ws, type, Wp_mas=None, Ws_mas=None):
+class Chevy_2(denorm.General_aprox):
+    def __init__(self, Ap, As, Wp, Ws, type, order, Q=None, Wp_mas=None, Ws_mas=None):
                 #si se quiere hacer un band pass o un band reject, Wp y Ws se usan como Wp- y Ws-
+        denorm.General_aprox.__init__(self, As, Ap, Wp, Ws, type, order, None, Wp, Wp_mas, Ws, Ws_mas)
         e=1/m.sqrt(m.pow(10,As/10)-1)
 
         if (type == "LP"):
@@ -25,7 +26,10 @@ class Chevy_2(object):
         elif (type == "BR"):
             WsN = (Wp_mas-Wp)/(Ws_mas-Ws)
 
-        n=m.ceil(m.acosh((m.sqrt(m.pow(10,As/10)-1))/(m.sqrt(m.pow(10,Ap/10)-1)))/(m.acosh(WsN)))
+        if order == None:
+            n=m.ceil(m.acosh((m.sqrt(m.pow(10,As/10)-1))/(m.sqrt(m.pow(10,Ap/10)-1)))/(m.acosh(WsN)))
+        else:
+            n = order
        # n=m.ceil(m.acosh((m.sqrt(m.pow(10,As/10)-1))/e)/(m.acosh(WsN)))
         #hallo los polos de chevy
         print("hola mijo")
@@ -35,8 +39,7 @@ class Chevy_2(object):
         omega = []
         poles = []
         zeros = []
-        self.Q = []
-        self.qmax = 0
+
         
       
         for k in range (0,n):
@@ -71,8 +74,11 @@ class Chevy_2(object):
        # pyplot.semilogx(self.w,-self.mag)
         #pyplot.show()
         self.H = denorm.General_aprox.denormalization(self,type,Ws,n,poles,zeros,Ws_mas,Wp,Wp_mas)
-        zero_denorm, pole_denorm, gain_denorm = signal.tf2zpk(self.H.num,self.H.den)
-        self.calcular_q(pole_denorm)
+
+        denorm.General_aprox.get_denormalize_roots(self, self.H)
+        denorm.General_aprox.calcular_q(self, self.polos_desnormalizados)
+        print(self.Q)
+
 
 
 

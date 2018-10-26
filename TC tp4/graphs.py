@@ -323,13 +323,13 @@ class graphs:
             
         elif  ApproxSelected=="Chebycheff"and OK==0:
 
-            self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
+            self.Function=Chevy.Chevy_1(Ap0, Aa0, wp0, wa0, FilterSelected, Orden, Q, wp1, wa1)
             self.sys=Chevy.Chevy_1.get_transfer(self.Function)
             self.set_filter()
 
         elif  ApproxSelected=="Chebycheff Inverso"and OK==0:
 
-            self.Function=chevy2.Chevy_2(Ap0, Aa0, wp0, wa0, FilterSelected, wp1, wa1)
+            self.Function=chevy2.Chevy_2(Ap0, Aa0, wp0, wa0, FilterSelected, Orden, Q, wp1, wa1)
             self.sys=chevy2.Chevy_2.get_transfer(self.Function)
             self.set_filter()
 
