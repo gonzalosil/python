@@ -6,6 +6,7 @@ from scipy import signal
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.figure import Figure
+from matplotlib.pyplot import plot,xscale,show
 import matplotlib.patches as patches
 from tkinter import *
 from tkinter import ttk
@@ -16,6 +17,7 @@ import Butterworth as Butter
 import Chevy_2 as chevy2
 import bessel as Bessel
 import Transfer_Maker as TF
+import cuentas
 class graphs:
 
 #----funciones de ploteo
@@ -74,12 +76,12 @@ class graphs:
 
 
     def plotMag_Etapa2(self,w,mag):
-        self.axis3.clear()
+        #self.axis3.clear()
         self.axis3.semilogx((w/(2*(math.pi))),-mag)
         self.axis3.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis3.set_xlabel("$f (Hz)$")
         self.axis3.set_ylabel("$Attenuation (dB)$")
-        self.dataPlot.draw()
+        self.dataPlot3.draw()
 
     def plotStep(self):
         self.axis.clear()
@@ -153,13 +155,12 @@ class graphs:
         self.plotMag()
     
     def set_filter_etapa2(self,arreglo_de_tf):
-     
+        self.axis3.clear()
         for i in range(0,len(arreglo_de_tf)):
             print(arreglo_de_tf[i])
             w,mag,phase = signal.bode(arreglo_de_tf[i])
-            print(w)
-            self.plotMag_Etapa2()
-
+            self.plotMag_Etapa2(w,mag)
+        
 #----------------------------------------------------------------------------------------------
 #--Se aprieta el boton Select y se ponen las entrys dependiendo el tipo de filtro y aproximacion
 #-------------------------------
@@ -356,9 +357,9 @@ class graphs:
 
         elif ApproxSelected=="Bessel"and OK==0:
 
-            if(FilterSelected=="LP"):
-                Tretardo=int(self.entry_Tretardo.get())
-                print(Tretardo)
+            #if(FilterSelected=="LP"):
+            Tretardo=int(self.entry_Tretardo.get())
+            print(Tretardo)
             self.Function=Bessel.Bessel(Aa0, Ap0, wp0, wa0,FilterSelected , Orden, Tretardo, wp0,wp1, wa0, wa1)
             self.sys=Bessel.Bessel.getTransfer(self.Function)
             self.set_filter()
@@ -567,24 +568,53 @@ class graphs:
     def Se_Apreto_Graph_Etapas_Polos(self):
 
        aux=[]
+       arreglo_TF=[]
        for i in range (0,self.List_Etapas_Polos.size()):
            extra=complex(self.List_Etapas_Polos.get(i))
-           print(extra)
-           aux.append(TF.crear_transferencia_de_polo([extra,np.conjugate(extra)]))
-           print([i])
-           w,mag,phase = scipy.signal.bode(aux[i])
-           
-       self.set_filter_etapa2(aux)
+           control=np.conjugate(extra)
+           if( cuentas.comparar(extra,control)):
+              aux.append(extra)
+              self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([],[(np.abs(np.real(extra)))],1/(np.abs(np.real(extra))))
+              arreglo_TF.append(self.TransferFun_Etapa2)
+
+           else:
+               aux.append(extra)
+               aux.append(np.conjugate(extra))
+               self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([],[np.conjugate(extra),extra],1)
+               arreglo_TF.append(self.TransferFun_Etapa2)
+
+       self.set_filter_etapa2(arreglo_TF)
 
 
 
     def Se_Apreto_Graph_Etapas_Ceros(self):
-        print("Se apreto Graph jeje")
+
+       aux=[]
+       arreglo_TF=[]
+       for i in range (0,self.List_Etapas_Ceros.size()):
+           extra=complex(self.List_Etapas_Ceros.get(i))
+           control=np.conjugate(extra)
+           if( cuentas.comparar(extra,control)):
+              aux.append(extra)
+              self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([(np.abs(np.real(extra)))],[],1/(np.abs(np.real(extra))))
+              arreglo_TF.append(self.TransferFun_Etapa2)
+
+           else:
+               aux.append(extra)
+               aux.append(np.conjugate(extra))
+               self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([np.conjugate(extra),extra],[],1)
+               arreglo_TF.append(self.TransferFun_Etapa2)
+
+       self.set_filter_etapa2(arreglo_TF)
 
     def Click_Limpiar_Polos(self):
+        self.axis3.clear()
+        self.dataPlot3.draw()
         self.List_Etapas_Polos.delete(0,END)
 
     def Click_Limpiar_Ceros(self):
+        self.axis3.clear()
+        self.dataPlot3.draw()
         self.List_Etapas_Ceros.delete(0,END)
 #------------------
 #-----frames
@@ -821,21 +851,12 @@ class graphs:
 
 
 
-        #se selecciona EL polo y EL cero
 
-        #self.Select_PZ = Button(self.Polos_Ceros,text="Select")   #,command=)
-        #self.Select_PZ.grid(row=2, column=2,padx=10,pady=10)
 
         #seleccionar las etapas que deseas graficar
         label_Select_etapa=Label(self.Polos_Ceros,text="Selecciona la etapa que deseas agregar a la lista:")
         label_Select_etapa.grid(row=0,columnspan=20)
 
-
-        #self.values_Etapa=[0,1,2]
-        #self.combo_Etapas=ttk.Combobox(self.Polos_Ceros,values=self.values_Etapa, width=50,state="readonly")
-        #self.combo_Etapas.set("Select Stage")
-        #self.combo_Etapas.grid(row=1,column=1,padx=10,pady=10)
-        #self.combo_Etapas.bind("<<ComboboxSelected>>", self.Selected_Etapa_a_Graph)
 
         self.List_Etapas_Polos=Listbox(self.Polos_Ceros, width=60)
         self.List_Etapas_Polos.grid(row=2,column=0)
@@ -845,16 +866,29 @@ class graphs:
         self.List_Etapas_Ceros.grid(row=2,column=1)
         self.List_Etapas_Ceros.delete(0,END)
 
+        Frame_botones_abajo_de_list=Frame(self.Polos_Ceros)
+        Frame_botones_abajo_de_list.grid(row=3, column=1,padx=10,pady=10)
+        Frame_botones_abajo_de_list_izq=Frame(self.Frame_botones_abajo_de_list)
+        Frame_botones_abajo_de_list_izq.grid(row=0,column=0)
+        Frame_botones_abajo_de_list_der=Frame(self.Frame_botones_abajo_de_list)
+        Frame_botones_abajo_de_list_der.grid(row=0,column=1)
 
-        self.Limpiar_Lista_Ceros = Button(self.Polos_Ceros,text="Clean List Ceros", command=self.Click_Limpiar_Ceros)   #,command=)
-        self.Limpiar_Lista_Ceros.grid(row=3, column=1,padx=10,pady=10)
-        self.Limpiar_Lista_Polos = Button(self.Polos_Ceros,text="Clean List Polos", command=self.Click_Limpiar_Polos) 
-        self.Limpiar_Lista_Polos.grid(row=3, column=0,padx=10,pady=10)
 
-        self.Graph_List_Etapas_Ceros = Button(self.Polos_Ceros,text="Graph List Ceros", command=self.Se_Apreto_Graph_Etapas_Ceros)   #,command=)
-        self.Graph_List_Etapas_Ceros.grid(row=4, column=1,padx=10,pady=10)
-        self.Graph_List_Etapas_Polos = Button(self.Polos_Ceros,text="Graph List Polos", command=self.Se_Apreto_Graph_Etapas_Polos) 
+        self.Limpiar_Lista_Polos = Button(self.Frame_botones_abajo_de_list,text="Clean Polos", command=self.Click_Limpiar_Polos) 
+        self.Limpiar_Lista_Polos.grid(row=0, column=1,padx=10,pady=10)
+        self.Graph_List_Etapas_Polos = Button(self.Frame_botones_abajo_de_list,text="Graph Polos", command=self.Se_Apreto_Graph_Etapas_Polos) 
         self.Graph_List_Etapas_Polos.grid(row=4, column=0,padx=10,pady=10)
+        self.Boton_Superpuesto = Button(self.Frame_botones_abajo_de_list,text="Superponer Polos") #,command=)
+        self.Boton_Superpuesto.grid(row=0, column=2,padx=10,pady=10)
+
+        self.Limpiar_Lista_Ceros = Button(self.Frame_botones_abajo_de_list,text="Clean Ceros", command=self.Click_Limpiar_Ceros)   #,command=)
+        self.Limpiar_Lista_Ceros.grid(row=0, column=0,padx=10,pady=10)
+        self.Graph_List_Etapas_Ceros = Button(self.Frame_botones_abajo_de_list,text="Graph Ceros", command=self.Se_Apreto_Graph_Etapas_Ceros)   #,command=)
+        self.Graph_List_Etapas_Ceros.grid(row=4, column=1,padx=10,pady=10)
+        
+
+        self.Boton_Superpuesto = Button(self.Frame_botones_abajo_de_list,text="Superponer Ceros") #,command=)
+        self.Boton_Superpuesto.grid(row=0, column=2,padx=10,pady=10)
 
         #grafico de polos
         graph_polos = Canvas(self.ventana_izquierda2)
@@ -869,19 +903,6 @@ class graphs:
 
         #ventana derecha graficos segunda atapa
 
-        self.Boton_Acumulado = Button(self.Frame_Botones_Graficos_Sup,text="Accumulate")   #,command=)
-        self.Boton_Acumulado.grid(row=0, column=0,padx=10,pady=10)
-        self.Boton_Induvidual = Button(self.Frame_Botones_Graficos_Sup,text="Individual") #,command=)
-        self.Boton_Induvidual.grid(row=0, column=1,padx=10,pady=10)
-        self.Boton_Superpuesto = Button(self.Frame_Botones_Graficos_Sup,text="Superpuesto") #,command=)
-        self.Boton_Superpuesto.grid(row=0, column=2,padx=10,pady=10)
-
-
-        self.Boton_Polos = Button(self.Frame_Botones_Graficos_Sup,text="Polos") #,command=)
-        self.Boton_Polos.grid(row=1, column=0,padx=10,pady=10)
-
-        self.Boton_Polos = Button(self.Frame_Botones_Graficos_Sup,text="Ceros") #,command=)
-        self.Boton_Polos.grid(row=1, column=1,padx=10,pady=10)
 
         graph_Superpuestos = Canvas(self.ventana_derecha2)
         graph_Superpuestos.grid(row=2, column=0,padx=10,pady=10)

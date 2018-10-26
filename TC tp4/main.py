@@ -37,6 +37,7 @@ for i in range(0,len(wachin.Transferencias_de_polos)):
     
     #print(wachin.Transferencias_de_polos[i],"transferencia de polo",i)
     w, mag, phase = sp.signal.bode(wachin.Transferencias_de_polos[i])
+    print(wachin.Transferencias_de_polos[i])
  #   print(max(mag),"maximo")
     xscale('log')
     plot(w,-mag)
