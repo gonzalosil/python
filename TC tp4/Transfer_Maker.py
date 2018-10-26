@@ -218,7 +218,9 @@ def crear_transferencia_de_polo(lista_con_raices):
         for i in range(0,len(lista_con_raices)):
             
            # for j in range(0,len(lista_con_raices[i])):
+            print(lista_con_raices[i],"jjijijijijijijij")
             denom=np.poly(lista_con_raices[i])
+            print(denom)
             if(len(lista_con_raices) == 2 ):
 
                 num=np.poly1d([(np.abs(lista_con_raices[i])**2)])
