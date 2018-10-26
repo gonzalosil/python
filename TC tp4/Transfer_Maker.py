@@ -27,9 +27,9 @@ class Transfer_Maker(object):
         self.crear_transferencias_zeros(self.Media_TransfersDeZeros)
         self.Q=self.calcular_q(self.polos_separados)
         self.maximo_de_transferencias=[]
-        self.lista_de_listas_polos=[]
-        self.lista_de_listas_zeros=[]
         self.test=self.ordenar_a_partir_de_los_q(self.polos_separados)
+        print(self.Transferencias_de_polos)
+        print(self.get_transferencia_de_polo_i(1),"polo i")
         #print(self.polos_separados,"polos")
         #print(self.test,"testeando ese ordenamiento")
         #self.armar_lista_de_listas(self.polos_separados,self.Q,self.maximo_de_transferencias)
@@ -178,11 +178,29 @@ class Transfer_Maker(object):
 
     def get_polos_separados(self):
         return self.polos_separados;
+
     def get_zeros_separados(self):
         return self.zeros_separados;
 
-        
+    def get_lista_de_polos(self):
+        return self.lista_de_listas_polos;
+
+    def get_lista_de_zeros(self):
+        return self.lista_de_listas_zeros;
+    
+    def get_lista_de_transferencias_polos(self):
+        return self.Transferencias_de_polos;
+    def get_lista_de_transferencias_zeros(self):
+        return self.Transferencias_de_zeros
+
+    def get_transferencia_de_polo_i(self, poloi):
+        return self.Transferencias_de_polos[poloi];
+
+    def get_transferencia_de_zero_i(self, zeroi):
+        return self.Transferencias_de_zeros[zeroi];
                 
+
+
 
 
             
