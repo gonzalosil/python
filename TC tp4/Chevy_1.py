@@ -38,43 +38,66 @@ class Chevy_1(denorm.General_aprox):
         omega = []
         poles = []
         zeros = []
-      
-        for k in range (0,n):
-            alpha.append([(2*(k+1)-1)/(2*n)*m.pi])
 
-        beta.append([1/n*m.asinh(1/e)])
-        beta.append([-1/n*m.asinh(1/e)])
+        while 1:
+            
+          
+            print(n, "n")
+            for k in range (0,n):
+                alpha.append([(2*(k+1)-1)/(2*n)*m.pi])
 
-       # print(beta[0][0])
-        for k in range (0,n):
-            if m.sin(alpha[k][0])*m.sinh(beta[0][0]) < 0: #tomo solo los polos con parte real negativa
-                sigma.append(m.sin(alpha[k][0])*m.sinh(beta[0][0]))
-                omega.append(m.cos(alpha[k][0])*m.cosh(beta[0][0])) #para omega es lo mismo si uso beta(0) o beta(1) ya que el cos es par
-            else:
-                sigma.append(m.sin(alpha[k][0])*m.sinh(beta[1][0]))
-                omega.append(m.cos(alpha[k][0])*m.cosh(beta[0][0]))
+            beta.append([1/n*m.asinh(1/e)])
+            beta.append([-1/n*m.asinh(1/e)])
 
-        for k in range (0,len(sigma)):
-            poles.append(complex(sigma[k],omega[k]))
+           # print(beta[0][0])
+            for k in range (0,n):
+                if m.sin(alpha[k][0])*m.sinh(beta[0][0]) < 0: #tomo solo los polos con parte real negativa
+                    sigma.append(m.sin(alpha[k][0])*m.sinh(beta[0][0]))
+                    omega.append(m.cos(alpha[k][0])*m.cosh(beta[0][0])) #para omega es lo mismo si uso beta(0) o beta(1) ya que el cos es par
+                else:
+                    sigma.append(m.sin(alpha[k][0])*m.sinh(beta[1][0]))
+                    omega.append(m.cos(alpha[k][0])*m.cosh(beta[0][0]))
+
+            for k in range (0,len(sigma)):
+                poles.append(complex(sigma[k],omega[k]))
 
 
-        #print(n)
-        #print (poles)
+            #print(n)
+            #print (poles)
         
-        self.num, self.den = signal.zpk2tf(zeros,poles,1)
-       #print(self.den)
-        k = self.den[len(self.den)-1]/self.num[len(self .num)-1]
-        self.sys = signal.TransferFunction(k*self.num,self.den)
-        self.w,self.mag,self.phase = signal.bode(self.sys, None, 10000)
-        #pyplot.semilogx(self.w,-self.mag)
-        #pyplot.show()
-        self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,Wp_mas,Ws,Ws_mas)
-        if n%2 == 0:
-            self.H.num = self.H.num*pow(10,-Ap/20)
+            self.num, self.den = signal.zpk2tf(zeros,poles,1)
+           #print(self.den)
+            k = self.den[len(self.den)-1]/self.num[len(self .num)-1]
+            self.sys = signal.TransferFunction(k*self.num,self.den)
+            self.w,self.mag,self.phase = signal.bode(self.sys, None, 10000)
+            #pyplot.semilogx(self.w,-self.mag)
+            #pyplot.show()
+            self.H = denorm.General_aprox.denormalization(self,type,Wp,n,poles,None,Wp_mas,Ws,Ws_mas)
+            if n%2 == 0:
+                self.H.num = self.H.num*pow(10,-Ap/20)
 
-        denorm.General_aprox.get_denormalize_roots(self, self.H)
-        denorm.General_aprox.calcular_q(self, self.polos_desnormalizados)
-        print(self.Q)
+            denorm.General_aprox.get_denormalize_roots(self, self.H)
+            denorm.General_aprox.calcular_q(self, self.polos_desnormalizados)
+            print(self.qmax,"qmax")
+            print (self.Q)
+            if Q != None: 
+                if self.qmax > Q:
+                    if n > 1:
+                        n = n-1
+                        alpha.clear()
+                        beta.clear()
+                        sigma.clear()
+                        omega.clear()
+                        poles.clear()
+                        zeros.clear()
+                        self.Q.clear()
+                    else:
+                        break
+                    
+                else:
+                    break
+            else:
+                break
         
     
     def get_transfer(self):

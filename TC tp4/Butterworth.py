@@ -8,7 +8,7 @@ import numpy as np
 import sympy as symp
 
 class Butterworth(General.General_aprox):
-    def __init__(self, As, Ap, wp, ws, tipo, orden=None, a=None, wpMenos=None,wpMas=None, wsMenos=None, wsMas=None):
+    def __init__(self, As, Ap, wp, ws, tipo, orden=None, Q=None, a=None, wpMenos=None,wpMas=None, wsMenos=None, wsMas=None):
 
         General.General_aprox.__init__(self, As, Ap, wp, ws, tipo, orden, a, wpMenos,wpMas, wsMenos, wsMas)
         self.nMinimo=0
@@ -21,14 +21,32 @@ class Butterworth(General.General_aprox):
         self.denom=np.poly1d([1])
         self.num=np.poly1d([1])
         self.Transferencia_norm=1
-        self.Transferencia_desnorm=1
+        self.Transferencia_desnorm = signal.TransferFunction([1],[1])
         self.epButter()
         self.nButter()
-        self.polosButter()
-        self.funcionTransferencia()
-        self.Q=[]
-        self.qmax=0
-        self.calcular_q()
+
+        while 1:
+            self.polosButter()
+            self.funcionTransferencia()
+            self.Q=[]
+            self.qmax=0
+            self.get_denormalize_roots(self.Transferencia_desnorm)
+            self.calcular_q(self.Transferencia_desnorm.poles)
+            print(self.Transferencia_desnorm.poles)
+            if Q != None: 
+                if self.qmax > Q:
+                    if self.n > 1:
+                        self.n = self.n-1
+                        self.Q.clear()
+                        self.polos.clear()
+                        self.zeros.clear()
+                    else:
+                        break
+                    
+                else:
+                    break
+            else:
+                break
        # self.conseguir_polos_por_separado()
         #self.testeador=self.cons
        
@@ -84,14 +102,14 @@ class Butterworth(General.General_aprox):
         return;
 
     #agregar a general aprox
-    def calcular_q(self):
-        for i in range (0,len(self.polos)):
-            modulo=np.abs(self.polos[i])
-            qaux=(modulo/(-2*np.real((self.polos[i]))))
-            self.Q.append(qaux)
-            self.Q.sort()
-            self.qmax=self.Q[(len(self.Q)-1)]
-        return;
+    #def calcular_q(self):
+    #    for i in range (0,len(self.polos)):
+    #        modulo=np.abs(self.polos[i])
+    #        qaux=(modulo/(-2*np.real((self.polos[i]))))
+    #        self.Q.append(qaux)
+    #        self.Q.sort()
+    #        self.qmax=self.Q[(len(self.Q)-1)]
+    #    return;
 
     def get_transfer(self):
         return self.Transferencia_desnorm

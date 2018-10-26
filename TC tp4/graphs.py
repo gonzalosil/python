@@ -316,7 +316,7 @@ class graphs:
 
         if ApproxSelected=="Butterworth" and OK==0:
 
-            self.Function=Butter.Butterworth(Aa0, Ap0, wp0, wa0, FilterSelected , Orden, Denormalize_percentage, wp0,wp1, wa0, wa1)
+            self.Function=Butter.Butterworth(Aa0, Ap0, wp0, wa0, FilterSelected , Orden, Q, Denormalize_percentage, wp0,wp1, wa0, wa1)
             self.sys=Butter.Butterworth.get_transfer(self.Function)
             self.set_filter()
             self.array_Q=(self.Function.get_q())[:]
