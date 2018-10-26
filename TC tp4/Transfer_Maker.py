@@ -25,11 +25,11 @@ class Transfer_Maker(object):
         self.Transferencias_de_zeros=[]
         self.crear_transferencias_polos(self.Media_TransferDePolos)
         self.crear_transferencias_zeros(self.Media_TransfersDeZeros)
-        self.Q=self.calcular_q(self.polos_separados)
+        self.Q=calcular_q(self.polos_separados)
         self.maximo_de_transferencias=[]
-        self.test=self.ordenar_a_partir_de_los_q(self.polos_separados)
-        print(self.Transferencias_de_polos)
-        print(self.get_transferencia_de_polo_i(1),"polo i")
+        self.test=ordenar_a_partir_de_los_q(self.polos_separados)
+       # print(self.Transferencias_de_polos)
+      #  print(self.get_transferencia_de_polo_i(1),"polo i")
         #print(self.polos_separados,"polos")
         #print(self.test,"testeando ese ordenamiento")
         #self.armar_lista_de_listas(self.polos_separados,self.Q,self.maximo_de_transferencias)
@@ -131,16 +131,7 @@ class Transfer_Maker(object):
         
         return;
 
-    def calcular_q(self,polos):
-        aux=[]
-        for i in range (0,len(polos)):
-            modulo=np.abs(polos[i])
-            qaux=(modulo/(-2*np.real((polos[i]))))
-            aux.append(qaux)
-        return aux;
-            #self.Q.sort()
-      
-        return;
+
 
     #def encontrar_q_y_maximos_de_transferencias(self):
     #    self.calcular_q(self.polos_separados)
@@ -159,22 +150,6 @@ class Transfer_Maker(object):
         return self.Q[0];
     def get_Max_for_ordening(self):
         return self.maximo_de_transferencias[0];
-
-    def ordenar_a_partir_de_los_q(self,raices): ##devuelve un arreglo con los polos o zeros que se quieren ordenas a partir del q
-        aux=self.calcular_q(raices)
-        aux.sort()
-        aux.reverse()
-        #print(aux,"q ordenados de mayor a menor")
-        result=[]
-        for i in range(0,len(raices)):
-            for j in range(0,len(raices)):
-                test=aux[i]
-                modulo=np.abs(raices[j])
-                qaux=(modulo/(-2*np.real((raices[j]))))
-                if (cuentas.comparar(aux[i],qaux)):
-                    result.append(raices[j])
-                   # print(raices[j])
-        return result;
 
     def get_polos_separados(self):
         return self.polos_separados;
@@ -204,9 +179,31 @@ class Transfer_Maker(object):
 
 
             
-
+def calcular_q(polos):
+        aux=[]
+        for i in range (0,len(polos)):
+            modulo=np.abs(polos[i])
+            qaux=(modulo/(-2*np.real((polos[i]))))
+            aux.append(qaux)
+        return aux;
+            #self.Q.sort()
+      
+        return;        
 
             
-                   
-
+def ordenar_a_partir_de_los_q(raices): ##devuelve un arreglo con los polos o zeros que se quieren ordenas a partir del q
+        aux=calcular_q(raices)
+        aux.sort()
+        aux.reverse()
+        #print(aux,"q ordenados de mayor a menor")
+        result=[]
+        for i in range(0,len(raices)):
+            for j in range(0,len(raices)):
+                test=aux[i]
+                modulo=np.abs(raices[j])
+                qaux=(modulo/(-2*np.real((raices[j]))))
+                if (cuentas.comparar(aux[i],qaux)):
+                    result.append(raices[j])
+                   # print(raices[j])
+        return result;
 
