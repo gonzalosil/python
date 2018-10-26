@@ -30,8 +30,8 @@ class Transfer_Maker(object):
         self.lista_de_listas_polos=[]
         self.lista_de_listas_zeros=[]
         self.test=self.ordenar_a_partir_de_los_q(self.polos_separados)
-        print(self.polos_separados,"polos")
-        print(self.test,"testeando ese ordenamiento")
+        #print(self.polos_separados,"polos")
+        #print(self.test,"testeando ese ordenamiento")
         #self.armar_lista_de_listas(self.polos_separados,self.Q,self.maximo_de_transferencias)
 
 
@@ -71,7 +71,7 @@ class Transfer_Maker(object):
                      #   b=(cmath.polar(self.polos[j]))
                         #if ((np.abs(self.polos[i]) ) == (np.abs(self.polos[j]))):
                         #    if( (cmath.phase(self.polos[i])) == (-1*cmath.phase(self.polos[j])) ):
-        print(aux,"tu vieja")
+        
         return aux;
 
     def armar_transferencias(self, raices):
@@ -94,7 +94,7 @@ class Transfer_Maker(object):
         ##capaz se puede hacer de otra forma
         denom=1
         num=np.poly1d([1])
-        print(num)
+        #print(num)
         ##para los polos
 
         for i in range(0,len(lista_con_raices)):
@@ -164,7 +164,7 @@ class Transfer_Maker(object):
         aux=self.calcular_q(raices)
         aux.sort()
         aux.reverse()
-        print(aux,"q ordenados de mayor a menor")
+        #print(aux,"q ordenados de mayor a menor")
         result=[]
         for i in range(0,len(raices)):
             for j in range(0,len(raices)):
@@ -173,7 +173,7 @@ class Transfer_Maker(object):
                 qaux=(modulo/(-2*np.real((raices[j]))))
                 if (cuentas.comparar(aux[i],qaux)):
                     result.append(raices[j])
-                    print(raices[j])
+                   # print(raices[j])
         return result;
 
     def get_polos_separados(self):
