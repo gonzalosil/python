@@ -164,7 +164,7 @@ class Transfer_Maker(object):
         aux=self.calcular_q(raices)
         aux.sort()
         aux.reverse()
-        print(aux,"q ordenados de menor a mayor")
+        print(aux,"q ordenados de mayor a menor")
         result=[]
         for i in range(0,len(raices)):
             for j in range(0,len(raices)):
@@ -176,6 +176,10 @@ class Transfer_Maker(object):
                     print(raices[j])
         return result;
 
+    def get_polos_separados(self):
+        return self.polos_separados;
+    def get_zeros_separados(self):
+        return self.zeros_separados;
 
         
                 
