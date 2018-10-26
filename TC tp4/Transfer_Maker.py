@@ -158,10 +158,10 @@ class Transfer_Maker(object):
         return self.zeros_separados;
 
     def get_lista_de_polos(self):
-        return self.lista_de_listas_polos;
+        return self.Media_TransferDePolos;
 
     def get_lista_de_zeros(self):
-        return self.lista_de_listas_zeros;
+        return self.Media_TransfersDeZeros;
     
     def get_lista_de_transferencias_polos(self):
         return self.Transferencias_de_polos;
