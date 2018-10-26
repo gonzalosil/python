@@ -163,6 +163,8 @@ class Transfer_Maker(object):
     def ordenar_a_partir_de_los_q(self,raices): ##devuelve un arreglo con los polos o zeros que se quieren ordenas a partir del q
         aux=self.calcular_q(raices)
         aux.sort()
+        aux.reverse()
+        print(aux,"q ordenados de menor a mayor")
         result=[]
         for i in range(0,len(raices)):
             for j in range(0,len(raices)):
