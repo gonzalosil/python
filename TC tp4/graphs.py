@@ -512,8 +512,20 @@ class graphs:
             self.ventana_segunda_etapa.grid()
             self.plotPZ()
 
-        
+#funciones parte 2
 
+    def Selected_Etapa_a_Graph(self, event):
+        Etapa_Selected=self.combo_Etapas.get()
+        self.List_Etapas.insert(END,Etapa_Selected)
+
+    def Se_Apreto_Clean_Stages(self):
+
+        items = self.List_Etapas.curselection()
+        pos = 0
+        for i in items :
+            idx = int(i) - pos
+            self.List_Etapas.delete( idx,idx )
+            pos = pos + 1
 
 #------------------
 #-----frames
@@ -738,12 +750,51 @@ class graphs:
 #-----VENTANA IZQUIERDA ETAPA 2
 #-----------------------------------------------------------------------------------------
 
-        graph_polos = Canvas(self.ventana_izquierda2)
-        graph_polos.grid(row=0, column=0,padx=10,pady=10)
 
+
+
+        self.Polos_Ceros=Frame(self.ventana_izquierda2)
+        self.Polos_Ceros.grid(row=0, column=0,padx=10,pady=10)
+
+        #polos y ceros 
+
+        self.values_Polos=[0,1,2]
+        self.combo_Polos=ttk.Combobox(self.Polos_Ceros,values=self.values_Polos, width=30,state="readonly")
+        self.combo_Polos.set("Select Polo")
+        self.combo_Polos.grid(row=0,column=0,padx=10,pady=10)
+
+        self.values_Ceros=[0,1,2]
+        self.combo_Ceros=ttk.Combobox(self.Polos_Ceros,values=self.values_Ceros, width=30,state="readonly")
+        self.combo_Ceros.set("Select Cero")
+        self.combo_Ceros.grid(row=0,column=1,padx=10,pady=10)
+
+        #se selecciona EL polo y EL cero
+
+        self.Select_PZ = Button(self.Polos_Ceros,text="Select")   #,command=)
+        self.Select_PZ.grid(row=0, column=2,padx=10,pady=10)
+
+        #seleccionar las etapas que deseas graficar
+        label_Select_etapa=Label(self.Polos_Ceros,text="Selecciona la etapa que deseas agregar a la lista:")
+        label_Select_etapa.grid(row=1,column=0)
+
+
+        self.values_Etapa=[0,1,2]
+        self.combo_Etapas=ttk.Combobox(self.Polos_Ceros,values=self.values_Etapa, width=30,state="readonly")
+        self.combo_Etapas.set("Select Stage")
+        self.combo_Etapas.grid(row=1,column=1,padx=10,pady=10)
+        self.combo_Etapas.bind("<<ComboboxSelected>>", self.Selected_Etapa_a_Graph)
+
+        self.List_Etapas=Listbox(self.Polos_Ceros,selectmode=EXTENDED, width=50)
+        self.List_Etapas.grid(row=2,columnspan=20)
+
+        self.Clean_List_Etapas = Button(self.Polos_Ceros,text="Clean List of Stages")#, command=self.Se_Apreto_Clean_Stages())   #,command=)
+        self.Clean_List_Etapas.grid(row=3, columnspan=50)
+
+        #grafico de polos
+        graph_polos = Canvas(self.ventana_izquierda2)
+        graph_polos.grid(row=1, column=0,padx=10,pady=10)
         fig = Figure()
         self.axis2 = fig.add_subplot(111)
-
         self.dataPlot2 = FigureCanvasTkAgg(fig, master=graph_polos)
         self.dataPlot2.draw()
         self.dataPlot2.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)

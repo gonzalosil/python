@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 from matplotlib.pyplot import plot,xscale,show
 import cuentas as cuentas
 import Transfer_Maker 
-
+from operator import itemgetter, attrgetter
 test=Butterworth.Butterworth(20,0.5,2000,1000,"HP")
 x=sympy.Symbol('x')
 test.get_denormalize_roots((test.Transferencia_desnorm))
@@ -28,14 +28,21 @@ wachin=Transfer_Maker.Transfer_Maker(test.polos_desnormalizados,test.zeros_desno
 #plot(w,-mag)
 #show()
 #print(wachin.norma_polos,"normassssss")
-print(wachin.Transferencias_de_polos,"asdasdasdsadasdasdasdads")
+#print(wachin.polos_separados,"asdasdasdsadasdasdasdads")
+#print(wachin.lista_de_listas_polos,"joaking")
+#print(wachin.lista_de_listas_polos,"joakMaster")
 for i in range(0,len(wachin.Transferencias_de_polos)):
     
     #print(wachin.Transferencias_de_polos[i],"transferencia de polo",i)
     w, mag, phase = sp.signal.bode(wachin.Transferencias_de_polos[i])
+ #   print(max(mag),"maximo")
     xscale('log')
     plot(w,-mag)
 show()
+
+
+
+#print(wachin.maximo_de_transferencias,"a ver esos maximos aurelios")
 #for i in range(0,len(wachin.Transferencias_de_zeros)):
     
 #    #print(wachin.Transferencias_de_polos[i],"transferencia de polo",i)
