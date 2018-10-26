@@ -542,12 +542,12 @@ class graphs:
         self.values_Ceros=self.TransferMaker.get_zeros_separados()
 
 
-        self.combo_Polos=ttk.Combobox(self.Polos_Ceros,values=self.values_Polos, width=70,state="readonly")
+        self.combo_Polos=ttk.Combobox(self.Polos_Ceros,values=self.values_Polos, width=60,state="readonly")
         self.combo_Polos.set("Etapas de los Polos")
         self.combo_Polos.grid(row=1,column=0,padx=10,pady=10)
         self.combo_Polos.bind("<<ComboboxSelected>>", self.Selected_Polo_to_Graph)
 
-        self.combo_Ceros=ttk.Combobox(self.Polos_Ceros,values=self.values_Ceros, width=70,state="readonly")
+        self.combo_Ceros=ttk.Combobox(self.Polos_Ceros,values=self.values_Ceros, width=60,state="readonly")
         self.combo_Ceros.set("Etapas de los Ceros")
         self.combo_Ceros.grid(row=1,column=1,padx=10,pady=10)
         self.combo_Ceros.bind("<<ComboboxSelected>>", self.Selected_Cero_to_Graph)
@@ -858,40 +858,40 @@ class graphs:
         label_Select_etapa.grid(row=0,columnspan=20)
 
 
-        self.List_Etapas_Polos=Listbox(self.Polos_Ceros, width=60)
+        self.List_Etapas_Polos=Listbox(self.Polos_Ceros, width=50, height=7)
         self.List_Etapas_Polos.grid(row=2,column=0)
         self.List_Etapas_Polos.delete(0,END)
 
-        self.List_Etapas_Ceros=Listbox(self.Polos_Ceros, width=60)
+        self.List_Etapas_Ceros=Listbox(self.Polos_Ceros, width=50, height=7)
         self.List_Etapas_Ceros.grid(row=2,column=1)
         self.List_Etapas_Ceros.delete(0,END)
 
-        Frame_botones_abajo_de_list=Frame(self.Polos_Ceros)
-        Frame_botones_abajo_de_list.grid(row=3, column=1,padx=10,pady=10)
-        Frame_botones_abajo_de_list_izq=Frame(self.Frame_botones_abajo_de_list)
-        Frame_botones_abajo_de_list_izq.grid(row=0,column=0)
-        Frame_botones_abajo_de_list_der=Frame(self.Frame_botones_abajo_de_list)
-        Frame_botones_abajo_de_list_der.grid(row=0,column=1)
+        self.Frame_botones_abajo_de_list=Frame(self.Polos_Ceros)
+        self.Frame_botones_abajo_de_list.grid(row=3, column=0)
+        self.Frame_botones_abajo_de_list_Z=Frame(self.Polos_Ceros)
+        self.Frame_botones_abajo_de_list_Z.grid(row=3, column=1)
+        self.Frame_botones_abajo_de_list_izq=Frame(self.Frame_botones_abajo_de_list)
+        self.Frame_botones_abajo_de_list_izq.grid(row=0,column=0)
+        self.Frame_botones_abajo_de_list_der=Frame(self.Frame_botones_abajo_de_list_Z)
+        self.Frame_botones_abajo_de_list_der.grid(row=0,column=1)
 
 
-        self.Limpiar_Lista_Polos = Button(self.Frame_botones_abajo_de_list,text="Clean Polos", command=self.Click_Limpiar_Polos) 
-        self.Limpiar_Lista_Polos.grid(row=0, column=1,padx=10,pady=10)
-        self.Graph_List_Etapas_Polos = Button(self.Frame_botones_abajo_de_list,text="Graph Polos", command=self.Se_Apreto_Graph_Etapas_Polos) 
-        self.Graph_List_Etapas_Polos.grid(row=4, column=0,padx=10,pady=10)
-        self.Boton_Superpuesto = Button(self.Frame_botones_abajo_de_list,text="Superponer Polos") #,command=)
-        self.Boton_Superpuesto.grid(row=0, column=2,padx=10,pady=10)
+        self.Limpiar_Lista_Polos = Button(self.Frame_botones_abajo_de_list_izq,text="Limpiar Polos", command=self.Click_Limpiar_Polos) 
+        self.Limpiar_Lista_Polos.grid(row=0, column=0,padx=10,pady=10)
+        self.Graph_List_Etapas_Polos = Button(self.Frame_botones_abajo_de_list_izq,text="Graficar Polos", command=self.Se_Apreto_Graph_Etapas_Polos) 
+        self.Graph_List_Etapas_Polos.grid(row=0, column=1,padx=10,pady=10)
+        self.Boton_Superpuesto_Polos = Button(self.Frame_botones_abajo_de_list_izq,text="Superponer Polos") #,command=)
+        self.Boton_Superpuesto_Polos.grid(row=0, column=2,padx=10,pady=10)
 
-        self.Limpiar_Lista_Ceros = Button(self.Frame_botones_abajo_de_list,text="Clean Ceros", command=self.Click_Limpiar_Ceros)   #,command=)
+        self.Limpiar_Lista_Ceros = Button(self.Frame_botones_abajo_de_list_der,text="Limpiar Ceros", command=self.Click_Limpiar_Ceros)  
         self.Limpiar_Lista_Ceros.grid(row=0, column=0,padx=10,pady=10)
-        self.Graph_List_Etapas_Ceros = Button(self.Frame_botones_abajo_de_list,text="Graph Ceros", command=self.Se_Apreto_Graph_Etapas_Ceros)   #,command=)
-        self.Graph_List_Etapas_Ceros.grid(row=4, column=1,padx=10,pady=10)
-        
-
-        self.Boton_Superpuesto = Button(self.Frame_botones_abajo_de_list,text="Superponer Ceros") #,command=)
-        self.Boton_Superpuesto.grid(row=0, column=2,padx=10,pady=10)
+        self.Graph_List_Etapas_Ceros = Button(self.Frame_botones_abajo_de_list_der,text="Graficar Ceros", command=self.Se_Apreto_Graph_Etapas_Ceros) 
+        self.Graph_List_Etapas_Ceros.grid(row=0, column=1,padx=10,pady=10)
+        self.Boton_Superpuesto_Ceros= Button(self.Frame_botones_abajo_de_list_der,text="Superponer Ceros") #,command=)
+        self.Boton_Superpuesto_Ceros.grid(row=0, column=2,padx=10,pady=10)
 
         #grafico de polos
-        graph_polos = Canvas(self.ventana_izquierda2)
+        graph_polos = Canvas(self.ventana_izquierda2, width=10, height=10)
         graph_polos.grid(row=1, column=0,padx=10,pady=10)
         fig = Figure()
         self.axis2 = fig.add_subplot(111)
@@ -900,12 +900,23 @@ class graphs:
         self.dataPlot2.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
         self.dataPlot2._tkcanvas.pack(side=TOP, expand=True)
         
+#----------------------------------
+#VENTANA DERECHA ETAPA 2
+#---------------------------------
+        label_OrdenEtapas=Label(self.ventana_derecha2,text="Orden de los polos segun el Q:")
+        label_OrdenEtapas.grid(row=0,columnspan=20)
 
-        #ventana derecha graficos segunda atapa
 
+        self.List_Orden_Q=Listbox(self.ventana_derecha2, width=50, height=7)
+        self.List_Orden_Q.grid(row=1,columnspan=20)
+        self.List_Orden_Q.delete(0,END)
+
+        self.boton_Odenar = Button(self.ventana_derecha2,text="Ordenar") #, command=self.) 
+        self.boton_Odenar.grid(row=2, columnspan=20)
+        
 
         graph_Superpuestos = Canvas(self.ventana_derecha2)
-        graph_Superpuestos.grid(row=2, column=0,padx=10,pady=10)
+        graph_Superpuestos.grid(row=3, column=0,padx=10,pady=10)
         figura = Figure()
         self.axis3 = figura.add_subplot(111)
         self.dataPlot3 = FigureCanvasTkAgg(figura, master=graph_Superpuestos)
