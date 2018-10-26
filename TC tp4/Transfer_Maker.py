@@ -219,10 +219,12 @@ def crear_transferencia_de_polo(lista_con_raices):
             
            # for j in range(0,len(lista_con_raices[i])):
             denom=np.poly(lista_con_raices[i])
-            if(len(lista_con_raices[i]) == 2 ):
-                num=np.poly1d([(self.norma_polos[i]**2)])
+            if(len(lista_con_raices) == 2 ):
+
+                num=np.poly1d([(np.abs(lista_con_raices[i])**2)])
             elif(len(lista_con_raices[i]) == 1 ):
-                num=np.poly1d([(self.norma_polos[i])])
+                norma_raices=(np.abs(np.real(lista_con_raices[i])))
+                num=np.poly1d([(norma_raices)])
 
                 #poli=np.poly1d([1/lista_con_raices[i][j]],-1)
                 #denom=denom*poli
@@ -243,8 +245,8 @@ def crear_transferencia_de_zero(lista_con_raices):
         ##para los polos zeros
         else:
             for i in range(0,len(lista_con_raices)):
-                for j in range(0,len(lista_con_raices[i])):
-                    poli=np.poly1d([1,-1*lista_con_raices[i][j]])
+                for j in range(0,len(lista_con_raices)):
+                    poli=np.poly1d([1,-1*lista_con_raices[i]])
                     num=num*poli
                 #self.Transferencias_de_zeros.append(signal.TransferFunction(num,denom))
         

@@ -31,6 +31,8 @@ wachin=Transfer_Maker.Transfer_Maker(test.polos_desnormalizados,test.zeros_desno
 #print(wachin.polos_separados,"asdasdasdsadasdasdasdads")
 #print(wachin.lista_de_listas_polos,"joaking")
 #print(wachin.lista_de_listas_polos,"joakMaster")
+a=Transfer_Maker.crear_transferencia_de_polo([(1+1j),(1-1+1j)])
+print(a)
 for i in range(0,len(wachin.Transferencias_de_polos)):
     
     #print(wachin.Transferencias_de_polos[i],"transferencia de polo",i)
