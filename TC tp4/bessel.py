@@ -28,8 +28,9 @@ class Bessel(General.General_aprox):
         General.General_aprox.__init__(self, As, Ap, wp, ws, tipo, orden, a, wpMenos,wpMas, wsMenos, wsMas)
         self.nMinimo=0
         self.nMaximo=15
-        self.Ws=ws*a/ws
-        self.Wp=wp*a/ws
+        self.t=a*1e-6
+        self.Ws=ws*self.t
+        self.Wp=wp
         self.n=1
         self.poles=[]
         self.zeros=[]
@@ -50,13 +51,14 @@ class Bessel(General.General_aprox):
         return P;
     def order_calc_Bessel(self,Ap):
         if(self.n != None):
-            Ns=(5*self.Wp**2)/(self.Ap*math.log(10))
+            Ns=(5*(self.Wp*self.t)**2)/(self.Ap*math.log(10))
             N=int(Ns)+1        #Se redondea el N para arriba
             if N<self.nMaximo :
                 self.n=N    #Se redondea el N para arriba
             else:
                 print("Math error:exceso en la capacidad de computo")
                 self.n=self.nMaximo
+
         return;
         #funcion que calcula la totalidad del polinomio de bessel en algebraico
     def polinomioBessel(self,a): 
@@ -83,7 +85,7 @@ class Bessel(General.General_aprox):
         self.Transferencia_norm=signal.TransferFunction(self.num,self.denom)
         self.poles=self.Transferencia_norm.poles
         self.zeros=self.Transferencia_norm.zeros
-        self.Transferencia_desnorm= General.General_aprox.denormalization(self,"LP",self.Wp,self.n,self.poles,self.zeros,2000,800,8000)
+        self.Transferencia_desnorm= General.General_aprox.denormalization(self,self.tipo,self.Wp,self.n,self.poles,self.zeros,2000,800,8000)
         return;
    
     
