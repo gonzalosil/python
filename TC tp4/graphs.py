@@ -654,7 +654,7 @@ class graphs:
                
        arreglo_TF=scipy.signal.ZerosPolesGain([],extra,1)
        self.set_filter_superponer(arreglo_TF) 
-
+       #es
     def Se_Apreto_superponer_ceros(self):
        aux=[]
        arreglo_TF=[]
