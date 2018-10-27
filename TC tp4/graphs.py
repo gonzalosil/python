@@ -469,6 +469,7 @@ class graphs:
         self.label_wp.grid(row=1,column=0)
         self.label_wa.grid(row=2,column=0)
 
+     
 
 #----entrys para band pass y band stop
     def labels_and_entrys_BPBS(self):
