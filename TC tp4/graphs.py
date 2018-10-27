@@ -634,7 +634,7 @@ class graphs:
            aux.append(extra)
         if(self.List_Etapas_Ceros.size()):
            for i in range (0,self.List_Etapas_Ceros.size()):
-                extra=complex(self.List_Etapas_Polos.get(i))
+                extra=complex(self.List_Etapas_Ceros.get(i))
                 aux.append(extra)
         test=TF.ordenar_a_partir_de_los_q(aux)
         for i in range (0,len(test)):
@@ -663,6 +663,8 @@ class graphs:
            control=np.conjugate(extra)
            if( cuentas.comparar(extra,control)):
               aux.append(extra)
+              if(cuentas.comparar(np.real(extra),0)):
+                  aux.append(np.conjugate(extra))
            else:
                aux.append(extra)
                aux.append(np.conjugate(extra))
