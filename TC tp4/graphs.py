@@ -166,6 +166,12 @@ class graphs:
             print(arreglo_de_tf[i])
             w,mag,phase = signal.bode(arreglo_de_tf[i])
             self.plotMag_Etapa2(w,mag)
+
+    
+    def set_filter_superponer(self,tf):
+         self.axis3.clear()
+         w,mag,phase=signal.bode(tf)
+         self.plotMag_Etapa2(w,mag)
         
 #----------------------------------------------------------------------------------------------
 #--Se aprieta el boton Select y se ponen las entrys dependiendo el tipo de filtro y aproximacion
@@ -458,7 +464,7 @@ class graphs:
         
 
         self.label_Hz.grid_forget()
-        self.label_Hz1.grid_forget()
+        self.label_Hz.grid_forget()
 
 
         self.label_wp.grid(row=1,column=0)
@@ -501,8 +507,8 @@ class graphs:
 
         self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
         self.label_Hz.grid(row=5,column=2)
-        self.label_Hz1=Label(self.ventana_izquierda,text="rad/s")
-        self.label_Hz1.grid(row=6,column=2)
+        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz.grid(row=6,column=2)
 
 
 #------------------------
@@ -570,23 +576,23 @@ class graphs:
 
     def Se_Apreto_Graph_Etapas_Polos(self):
 
-       aux=[]
-       arreglo_TF=[]
-       for i in range (0,self.List_Etapas_Polos.size()):
-           extra=complex(self.List_Etapas_Polos.get(i))
-           control=np.conjugate(extra)
-           if( cuentas.comparar(extra,control)):
+      aux=[]
+      arreglo_TF=[]
+      for i in range (0,self.List_Etapas_Polos.size()):
+          extra=complex(self.List_Etapas_Polos.get(i))
+          control=np.conjugate(extra)
+          if( cuentas.comparar(extra,control)):
+             aux.append(extra)
+             self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([],[(np.abs(np.real(extra)))],(np.abs(np.real(extra))))
+             arreglo_TF.append(self.TransferFun_Etapa2)
+
+          else:
               aux.append(extra)
-              self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([],[(np.abs(np.real(extra)))],1/(np.abs(np.real(extra))))
+              aux.append(np.conjugate(extra))
+              self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([],[np.conjugate(extra),extra],(np.abs(extra))**2)
               arreglo_TF.append(self.TransferFun_Etapa2)
 
-           else:
-               aux.append(extra)
-               aux.append(np.conjugate(extra))
-               self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([],[np.conjugate(extra),extra],1)
-               arreglo_TF.append(self.TransferFun_Etapa2)
-
-       self.set_filter_etapa2(arreglo_TF)
+      self.set_filter_etapa2(arreglo_TF)
 
 
 
@@ -635,7 +641,34 @@ class graphs:
            self.List_Orden_Q.insert(END,test[i])
       
     def Se_Apreto_Superponer(self):
-        print("se apreto Superponer ")
+       aux=[]
+       arreglo_TF=[]
+       for i in range (0,self.List_Etapas_Polos.size()):
+           extra=complex(self.List_Etapas_Polos.get(i))
+           control=np.conjugate(extra)
+           if( cuentas.comparar(extra,control)):
+              aux.append(extra)
+           else:
+               aux.append(extra)
+               aux.append(np.conjugate(extra))
+               
+       arreglo_TF=scipy.signal.ZerosPolesGain([],extra,1)
+       self.set_filter_superponer(arreglo_TF) 
+
+    def Se_Apreto_superponer_ceros(self):
+       aux=[]
+       arreglo_TF=[]
+       for i in range (0,self.List_Etapas_Ceros.size()):
+           extra=complex(self.List_Etapas_Ceros.get(i))
+           control=np.conjugate(extra)
+           if( cuentas.comparar(extra,control)):
+              aux.append(extra)
+           else:
+               aux.append(extra)
+               aux.append(np.conjugate(extra))
+               
+       arreglo_TF=scipy.signal.ZerosPolesGain(extra,[],1)
+       self.set_filter_superponer(arreglo_TF) 
 
 #------------------
 #-----frames
@@ -904,14 +937,14 @@ class graphs:
         self.Limpiar_Lista_Polos.grid(row=0, column=0,padx=10,pady=10)
         self.Graph_List_Etapas_Polos = Button(self.Frame_botones_abajo_de_list_izq,text="Graficar Polos", command=self.Se_Apreto_Graph_Etapas_Polos) 
         self.Graph_List_Etapas_Polos.grid(row=0, column=1,padx=10,pady=10)
-        self.Boton_Superpuesto_Polos = Button(self.Frame_botones_abajo_de_list_izq,text="Superponer Polos") #,command=)
+        self.Boton_Superpuesto_Polos = Button(self.Frame_botones_abajo_de_list_izq,text="Superponer Polos" ,command=self.Se_Apreto_Superponer)
         self.Boton_Superpuesto_Polos.grid(row=0, column=2,padx=10,pady=10)
 
         self.Limpiar_Lista_Ceros = Button(self.Frame_botones_abajo_de_list_der,text="Limpiar Ceros", command=self.Click_Limpiar_Ceros)  
         self.Limpiar_Lista_Ceros.grid(row=0, column=0,padx=10,pady=10)
         self.Graph_List_Etapas_Ceros = Button(self.Frame_botones_abajo_de_list_der,text="Graficar Ceros", command=self.Se_Apreto_Graph_Etapas_Ceros) 
         self.Graph_List_Etapas_Ceros.grid(row=0, column=1,padx=10,pady=10)
-        self.Boton_Superpuesto_Ceros= Button(self.Frame_botones_abajo_de_list_der,text="Superponer Ceros", command=self.Se_Apreto_Superponer) 
+        self.Boton_Superpuesto_Ceros= Button(self.Frame_botones_abajo_de_list_der,text="Superponer Ceros", command=self.Se_Apreto_superponer_ceros) 
         self.Boton_Superpuesto_Ceros.grid(row=0, column=2,padx=10,pady=10)
 
         #grafico de polos

@@ -38,6 +38,7 @@
     <Compile Include="main.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="newstaffpy.py" />
     <Compile Include="TC_tp4.py" />
     <Compile Include="Transfer_Maker.py">
       <SubType>Code</SubType>
