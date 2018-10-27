@@ -18,6 +18,7 @@ import Chevy_2 as chevy2
 import bessel as Bessel
 import Transfer_Maker as TF
 import cuentas
+from numpy import *
 class graphs:
 
 #----funciones de ploteo
@@ -37,7 +38,7 @@ class graphs:
         self.axis.set_xlabel("$f (Hz)$")
         self.axis.set_ylabel("$Attenuation (dB)$")
 
-        wp0=float(self.entry_wp0.get())#menos
+        wp0=float(self.entry_wp0.get())
         wa0=float(self.entry_wa0.get())
         Ap=float(self.entry_Ap0.get())
         Aa=float(self.entry_Aa0.get())
@@ -76,7 +77,6 @@ class graphs:
 
 
     def plotMag_Etapa2(self,w,mag):
-        #self.axis3.clear()
         self.axis3.semilogx((w/(2*(math.pi))),-mag)
         self.axis3.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis3.set_xlabel("$f (Hz)$")
@@ -100,14 +100,15 @@ class graphs:
         self.dataPlot.draw()
 
         
-        #ACA VAN LOS CAMBIOS QUE HIZO BUALÓ
+
         
     def plotGroupDelay(self):
         self.axis.clear()
-        self.axis.plot(self.GDfreq,self.gd)
+        self.axis.plot(range(0,len(self.gd)),self.gd)
         self.axis.grid(color='grey',linestyle='-',linewidth=0.1)
         self.axis.set_ylabel("$Group delay [ms]$")
         self.axis.set_xlabel("$Frequency [Hz]$")
+        self.axis.set_xlim(0,200)
         self.dataPlot.draw()
 
     def plotPZ(self):
@@ -154,7 +155,9 @@ class graphs:
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
-        self.GDfreq,self.gd = signal.group_delay((self.sys.num,self.sys.den))       #ACA VAN MAS CAMBIOS!!
+        w,h=signal.freqs(self.sys.num,self.sys.den,worN=np.logspace(-1,50,1000))
+        g=-diff(unwrap(angle(h)))/diff(w)
+        self.gd = g      
         self.plotMag()
     
     def set_filter_etapa2(self,arreglo_de_tf):
@@ -215,6 +218,9 @@ class graphs:
 #
 #-------------------------------------
     def Se_Apreto_Graph(self):
+
+        
+        self.label_WARNING.grid_forget()
 
         #tipo de filtro y aproximacion
         ApproxSelected=self.Type_of_approx.get()
@@ -306,7 +312,7 @@ class graphs:
         else:
             OK=0
 
-        self.label_WARNING=Label(self.ventana_izquierda,text="Los datos no cumplen plantilla, vuelva a ingresarlos! ", font='arial', fg='red')
+        
         if OK==1:
             self.label_WARNING.grid(row=16,columnspan=20)
         else:
@@ -375,21 +381,14 @@ class graphs:
 
         if FilterSelected=="LP":
             
-           #print(FilterSelected)
+
            self.labels_and_entrys_LPHP()
-           #self.set_low_pass()
         elif  FilterSelected=="HP":
-            #print(FilterSelected)
             self.labels_and_entrys_LPHP()
-            #self.set_high_pass()
         elif  FilterSelected=="BP":
-            #print(FilterSelected)
             self.labels_and_entrys_BPBS()
-            #self.set_band_pass()
         elif FilterSelected=="BR":
-            #print(FilterSelected)
             self.labels_and_entrys_BPBS()
-            #self.set_band_stop()
         else:
             print("unknown")
 
@@ -634,6 +633,8 @@ class graphs:
         for i in range (0,len(test)):
            self.List_Orden_Q.insert(END,test[i])
       
+    def Se_Apreto_Superponer(self):
+        print("se apreto Superponer ")
 
 #------------------
 #-----frames
@@ -654,6 +655,7 @@ class graphs:
         self.Etapa.grid(row=0,column=0)
 
         self.Etapa.bind("<<ComboboxSelected>>", self.Selected_Etapa)
+
 
 
 
@@ -712,6 +714,8 @@ class graphs:
         self.Type_of_filter.set("Select Type of Filter")
         self.Type_of_filter.grid(row=0,column=1,padx=10,pady=10)
 
+
+        self.label_WARNING=Label(self.ventana_izquierda,text="Los datos no cumplen plantilla, vuelva a ingresarlos! ", font='arial', fg='red')
 
 #boton seleccionador
         button_select=Button(self.ventana_izquierda, text="   Select   ", command=self.Se_Apreto_Select)
@@ -930,7 +934,7 @@ class graphs:
         self.List_Orden_Q.grid(row=1,columnspan=20)
         self.List_Orden_Q.delete(0,END)
 
-        self.boton_Odenar = Button(self.ventana_derecha2,text="Ordenar",command=self.Click_ordenar) #, command=self.) 
+        self.boton_Odenar = Button(self.ventana_derecha2,text="Ordenar",command=self.Click_ordenar) 
         self.boton_Odenar.grid(row=2, columnspan=20)
         
 
