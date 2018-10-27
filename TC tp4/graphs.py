@@ -45,17 +45,17 @@ class graphs:
         
 
 
-        if self.Type_of_filter.get()=="LP":
+        if self.Type_of_filter.get()=="LP" and self.Type_of_approx.get()!="Bessel":
             self.axis.add_patch(patches.Rectangle((0,Ap),wp0/(2*math.pi),50, color='magenta'))
             self.axis.set_ylim(0)
             self.axis.set_xlim(wp0/(4*math.pi),5*wa0/(2*math.pi))
             self.axis.add_patch(patches.Rectangle((wa0/(2*math.pi),0),5*wa0/(2*math.pi),Aa, color='magenta'))
-        elif self.Type_of_filter.get()=="HP":
+        elif self.Type_of_filter.get()=="HP"and self.Type_of_approx.get()!="Bessel":
             self.axis.add_patch(patches.Rectangle((wp0/(2*math.pi),Ap),2*wp0/(2*math.pi),1000, color='magenta')) #rectangulo de la banda pasante
             self.axis.add_patch(patches.Rectangle((wa0/(8*math.pi),0),wa0/(2*math.pi),Aa, color='magenta'))
             self.axis.set_ylim(0)
             self.axis.set_xlim(wa0/(8*math.pi),2*wp0/(2*math.pi))
-        elif self.Type_of_filter.get()=="BP":
+        elif self.Type_of_filter.get()=="BP"and self.Type_of_approx.get()!="Bessel":
 
             wp1=float(self.entry_wp1.get())#mas
             wa1=float(self.entry_wa1.get())
@@ -64,7 +64,7 @@ class graphs:
             self.axis.add_patch(patches.Rectangle((0,0),wa0/(2*math.pi),Aa, color='magenta')) #rectangulo de la primera banda atenuada
             self.axis.add_patch(patches.Rectangle((wc_p/(2*math.pi),Ap),wp1/(8*math.pi),1000, color='magenta')) #rectangulo de la banda pasante
             self.axis.add_patch(patches.Rectangle((wa1/(2*math.pi),0),10*wa1/(2*math.pi),Aa, color='magenta')) #rectangulo del ultima banda atenuada
-        elif self.Type_of_filter.get()=="BR":
+        elif self.Type_of_filter.get()=="BR"and self.Type_of_approx.get()!="Bessel":
             wp1=float(self.entry_wp1.get())#mas
             wa1=float(self.entry_wa1.get())
             wc_a=math.sqrt(wa0*wa1)
@@ -446,6 +446,7 @@ class graphs:
         self.label_wp1.grid_forget()
         self.label_wa1.grid_forget()
 
+        #-
 
         self.entry_wp1.grid_forget()
         self.entry_wa1.grid_forget()
