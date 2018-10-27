@@ -616,6 +616,22 @@ class graphs:
         self.axis3.clear()
         self.dataPlot3.draw()
         self.List_Etapas_Ceros.delete(0,END)
+
+    def Click_ordenar(self):
+        self.List_Orden_Q.delete(0,END)
+        aux=[]
+        for i in range (0,self.List_Etapas_Polos.size()):
+           extra=complex(self.List_Etapas_Polos.get(i))
+           aux.append(extra)
+        if(self.List_Etapas_Ceros.size()):
+           for i in range (0,self.List_Etapas_Ceros.size()):
+                extra=complex(self.List_Etapas_Polos.get(i))
+                aux.append(extra)
+        test=TF.ordenar_a_partir_de_los_q(aux)
+        for i in range (0,len(test)):
+           self.List_Orden_Q.insert(END,test[i])
+      
+
 #------------------
 #-----frames
 #------------------
@@ -911,7 +927,7 @@ class graphs:
         self.List_Orden_Q.grid(row=1,columnspan=20)
         self.List_Orden_Q.delete(0,END)
 
-        self.boton_Odenar = Button(self.ventana_derecha2,text="Ordenar") #, command=self.) 
+        self.boton_Odenar = Button(self.ventana_derecha2,text="Ordenar",command=self.Click_ordenar) #, command=self.) 
         self.boton_Odenar.grid(row=2, columnspan=20)
         
 
