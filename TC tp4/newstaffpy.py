@@ -37,4 +37,3 @@
       #         aux.append(np.conjugate(extra))
       #         self.TransferFun_Etapa2=scipy.signal.ZerosPolesGain([],[np.conjugate(extra),extra],(np.abs(extra))**2)
       #         arreglo_TF.append(self.TransferFun_Etapa2)
-      #self.set_filter_etapa2(arreglo_TF)
