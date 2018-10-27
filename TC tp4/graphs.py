@@ -99,6 +99,9 @@ class graphs:
         self.axis.set_ylabel("$V_{out} (Volts)$")
         self.dataPlot.draw()
 
+        
+        #ACA VAN LOS CAMBIOS QUE HIZO BUALÓ
+        
     def plotGroupDelay(self):
         self.axis.clear()
         self.axis.plot(self.GDfreq,self.gd)
@@ -151,7 +154,7 @@ class graphs:
         self.stepT,self.stepMag = signal.step(self.sys)
         self.impT,self.impMag = signal.impulse(self.sys)
         self.pzg = signal.tf2zpk(self.sys.num, self.sys.den)
-        self.GDfreq,self.gd = signal.group_delay((self.sys.num,self.sys.den))
+        self.GDfreq,self.gd = signal.group_delay((self.sys.num,self.sys.den))       #ACA VAN MAS CAMBIOS!!
         self.plotMag()
     
     def set_filter_etapa2(self,arreglo_de_tf):
