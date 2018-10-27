@@ -198,7 +198,6 @@ class graphs:
             print("unknown")
 
 
-
         FilterSelected=self.Type_of_filter.get()
 
         if FilterSelected=="LP":
@@ -464,7 +463,7 @@ class graphs:
         
 
         self.label_Hz.grid_forget()
-        self.label_Hz.grid_forget()
+        self.label_Hz1.grid_forget()
 
 
         self.label_wp.grid(row=1,column=0)
@@ -496,19 +495,18 @@ class graphs:
         self.entry_wa1.grid(row=6,column=1)
 
 
-        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
-        self.label_Hz.grid(row=1,column=2)
-        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
-        self.label_Hz.grid(row=2,column=2)
+        self.label_Hz2=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz2.grid(row=1,column=2)
+        self.label_Hz3=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz3.grid(row=2,column=2)
         self.label_dB=Label(self.ventana_izquierda,text="dB")
         self.label_dB.grid(row=3,column=2)
         self.label_dB=Label(self.ventana_izquierda,text="dB")
         self.label_dB.grid(row=4,column=2)
 
-        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
+
         self.label_Hz.grid(row=5,column=2)
-        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
-        self.label_Hz.grid(row=6,column=2)
+        self.label_Hz1.grid(row=6,column=2)
 
 
 #------------------------
@@ -744,6 +742,8 @@ class graphs:
         self.Type_of_approx.grid(row=0,column=0,padx=10,pady=10)
    
 #Seleccionador de tipo de filtro
+        self.label_Hz=Label(self.ventana_izquierda,text="rad/s")
+        self.label_Hz1=Label(self.ventana_izquierda,text="rad/s")
 
         values_filter=["LP","HP","BP","BR"]
         self.Type_of_filter=ttk.Combobox(self.ventana_izquierda,values=values_filter, width=20,state="readonly")
