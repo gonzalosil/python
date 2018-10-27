@@ -906,7 +906,7 @@ class graphs:
         self.Limpiar_Lista_Ceros.grid(row=0, column=0,padx=10,pady=10)
         self.Graph_List_Etapas_Ceros = Button(self.Frame_botones_abajo_de_list_der,text="Graficar Ceros", command=self.Se_Apreto_Graph_Etapas_Ceros) 
         self.Graph_List_Etapas_Ceros.grid(row=0, column=1,padx=10,pady=10)
-        self.Boton_Superpuesto_Ceros= Button(self.Frame_botones_abajo_de_list_der,text="Superponer Ceros") #,command=)
+        self.Boton_Superpuesto_Ceros= Button(self.Frame_botones_abajo_de_list_der,text="Superponer Ceros", command=self.Se_Apreto_Superponer) 
         self.Boton_Superpuesto_Ceros.grid(row=0, column=2,padx=10,pady=10)
 
         #grafico de polos
@@ -922,7 +922,7 @@ class graphs:
 #----------------------------------
 #VENTANA DERECHA ETAPA 2
 #---------------------------------
-        label_OrdenEtapas=Label(self.ventana_derecha2,text="Orden de los polos segun el Q:")
+        label_OrdenEtapas=Label(self.ventana_derecha2,text="Ordenar etapas automaticamente")
         label_OrdenEtapas.grid(row=0,columnspan=20)
 
 
