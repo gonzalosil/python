@@ -83,9 +83,9 @@ class General_aprox(object):
                 B=(Wamas-Wamenos)/Wo
 
             
-            s1=c.tf([1,0],[Wo])
-            s2=c.tf([Wo],[1,0])
-            s=1/B*(s1+s2)
+           # s1=c.tf([1,0],[Wo])
+           # s2=c.tf([Wo],[1,0])
+            s=c.tf([1,0,Wo**2],[1,0])/(Wo*B)
             tf = c.tf([1],[1])
 
             if zeros != None:
@@ -95,7 +95,13 @@ class General_aprox(object):
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
 
-            tf = signal.TransferFunction(tf.num[0][0], tf.den[0][0])
+            if tf.num[0][0][len(tf.num[0][0])-1] == 0 or tf.den[0][0][len(tf.den[0][0])-1] ==0:
+                k=1
+            else:
+                k = tf.den[0][0][len(tf.den[0][0])-1]/tf.num[0][0][len(tf.num[0][0])-1]
+
+
+            tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
 
         elif type == "BR":
             if (m.sqrt(Wpmas*W) > m.sqrt(Wamas*Wamenos)):
@@ -117,7 +123,7 @@ class General_aprox(object):
                 for k in range (0,len(poles)):
                     tf = tf * 1/(s-poles[k])
 
-            k = tf.den[0][0][len(tf.den[0][0])-1]/tf.num[0][0][0]
+            k = tf.den[0][0][len(tf.den[0][0])-1]/tf.num[0][0][len(tf.num[0][0])-1]
 
             tf = signal.TransferFunction(k*tf.num[0][0], tf.den[0][0])
             

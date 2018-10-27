@@ -47,6 +47,8 @@ class Butterworth(General.General_aprox):
                     break
             else:
                 break
+        if tipo == "BP":
+            self.Transferencia_desnorm._num = self.Transferencia_desnorm._num*(3.3333333333333333333333/(Ap+(1/As)))
        # self.conseguir_polos_por_separado()
         #self.testeador=self.cons
        
