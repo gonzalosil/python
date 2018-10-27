@@ -446,6 +446,7 @@ class graphs:
         self.label_wp1.grid_forget()
         self.label_wa1.grid_forget()
 
+        #-
 
         self.entry_wp1.grid_forget()
         self.entry_wa1.grid_forget()
