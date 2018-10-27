@@ -98,6 +98,8 @@ class Chevy_2(denorm.General_aprox):
             else:
                 break
 
+      
+
 
 
     def get_transfer(self):
